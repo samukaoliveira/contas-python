@@ -17,10 +17,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from contas.views import index
-from django.shortcuts import redirect
+from django.views.generic import RedirectView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', lambda request: redirect('home/')),
-    path('home/', index.home),
+    path('', RedirectView.as_view(url='/home/', permanent=False)),
+    path('home/', index.home, name='home_path'),
 ]

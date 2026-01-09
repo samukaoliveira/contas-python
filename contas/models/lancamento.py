@@ -13,6 +13,16 @@ class Lancamento(models.Model):
     dt_criacao = models.DateTimeField(auto_now=True)
     dt_update = models.DateTimeField(auto_now=True)
 
+    class Natureza(models.TextChoices):
+        DESPESA = 'DESPESA', 'Despesa'
+        RECEITA = 'RECEITA', 'Receita'
+
+    natureza = models.CharField(
+        max_length=10,
+        choices=Natureza.choices,
+        default=Natureza.DESPESA
+    )
+
 
     def __str__(self):
         return self.descricao

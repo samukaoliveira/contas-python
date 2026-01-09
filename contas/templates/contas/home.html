@@ -1,10 +1,10 @@
 <html>
     <body>
         
-        <h1><a href="/home/?mes={{ anterior.mes }}&ano={{ anterior.ano }}">
+        <h1><a href="{% url 'home_path' %}?mes={{ anterior.mes }}&ano={{ anterior.ano }}">
                 ⬅
             </a>&nbsp&nbsp {{ competencia.mes_nome }}/{{ competencia.ano }} &nbsp&nbsp
-            <a href="/home/?mes={{ proximo.mes }}&ano={{ proximo.ano }}">
+            <a href="{% url 'home_path' %}?mes={{ proximo.mes }}&ano={{ proximo.ano }}">
                 ➡
             </a>
         </h1>
@@ -24,5 +24,10 @@
                 {% endfor %}
             </tbody>
         </table>
+
+        <p>{{ receitas_previstas }}</p>
+        <p>{{ despesas_previstas }}</p>
+        <p>{{ receitas_realizadas }}</p>
+        <p>{{ despesas_realizadas }}</p>
     </body>
 </html>

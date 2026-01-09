@@ -1,5 +1,6 @@
 from datetime import date
 from contas.models import Competencia
+from contas.services import lancamento_service
 
 def obter_ou_criar_competencia(mes=None, ano=None):
     hoje = date.today()
@@ -45,3 +46,36 @@ def proximo(mes, ano):
         "mes": novo_mes, 
         "ano": novo_ano
     }
+
+
+def total_receitas_previstas(competencia):
+    lancamentos = lancamento_service.get_receitas_competencia(competencia)
+
+    return soma_lancamentos(lancamentos)
+
+
+def total_despesas_previstas(competencia):
+    lancamentos = lancamento_service.get_despesas_competencia(competencia)
+
+    return soma_lancamentos(lancamentos)
+
+
+def total_receitas_realizadas(competencia):
+
+    lancamentos = lancamento_service.get_receitas_competencia(competencia).filter(pago = True)
+
+    return soma_lancamentos(lancamentos)
+
+
+def total_despesas_realizadas(competencia):
+    lancamentos = lancamento_service.get_despesas_competencia(competencia).filter(pago = True)
+
+    return soma_lancamentos(lancamentos)
+
+
+def soma_lancamentos(lancamentos):
+    soma = 0
+    for l in lancamentos:
+        soma += l.valor
+
+    return soma

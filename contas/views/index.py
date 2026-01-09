@@ -22,12 +22,14 @@ def home(request):
         'competencia': competencia,
         'lancamentos': lancamentos,
         'anterior': competencia_service.anterior(mes, ano),
-        'proximo': competencia_service.proximo(mes, ano)
+        'proximo': competencia_service.proximo(mes, ano),
+        'receitas_previstas': competencia_service.total_receitas_previstas(competencia),
+        'despesas_previstas': competencia_service.total_despesas_previstas(competencia),
+        'receitas_realizadas': competencia_service.total_receitas_realizadas(competencia),
+        'despesas_realizadas': competencia_service.total_despesas_realizadas(competencia),
     })
 
 
-def competencia_anterior(request):
-    request.GET.get
 
 
 
