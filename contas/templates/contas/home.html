@@ -1,5 +1,28 @@
 <html>
     <body>
-        <h1>Título</h1>
+        
+        <h1><a href="/home/?mes={{ anterior.mes }}&ano={{ anterior.ano }}">
+                ⬅
+            </a>&nbsp&nbsp {{ competencia.mes_nome }}/{{ competencia.ano }} &nbsp&nbsp
+            <a href="/home/?mes={{ proximo.mes }}&ano={{ proximo.ano }}">
+                ➡
+            </a>
+        </h1>
+        <table>
+            <th>Data</th>
+            <th>Lançamento</th>
+            <th>Valor</th>
+            <th>Pago</th>
+            <tbody>
+                {% for l in lancamentos %}
+                <tr>
+                    <td>{{ l.data }}</td>
+                    <td>{{ l.descricao }}</td>
+                    <td>{{ l.valor }}</td>
+                    <td>{{ l.pago }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </body>
 </html>

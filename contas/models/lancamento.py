@@ -7,7 +7,13 @@ class Lancamento(models.Model):
     pago = models.BooleanField(default=False)
     fatura = models.ForeignKey(
         'contas.Fatura', 
-        on_delete=models.CASCADE, null=True
+        on_delete=models.CASCADE, null=True,
+        blank=True
         )
     dt_criacao = models.DateTimeField(auto_now=True)
     dt_update = models.DateTimeField(auto_now=True)
+
+
+    def __str__(self):
+        return self.descricao
+        

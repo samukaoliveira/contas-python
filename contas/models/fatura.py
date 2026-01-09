@@ -17,3 +17,6 @@ class Fatura(models.Model):
                 name='unique_fatura_cartao_competencia'
             )
         ]
+
+    def __str__(self):
+        return f'{self.cartao}/{self.mes:02d}'

@@ -1,12 +1,47 @@
 from datetime import date
 from contas.models import Competencia
 
-def obter_competencia_atual():
+def obter_ou_criar_competencia(mes=None, ano=None):
     hoje = date.today()
 
+    mes = mes or hoje.month
+    ano = ano or hoje.year
+
     competencia, _ = Competencia.objects.get_or_create(
-        mes=hoje.month,
-        ano=hoje.year
+        mes=mes,
+        ano=ano
     )
 
     return competencia
+
+
+def anterior(mes, ano):
+    atual = obter_ou_criar_competencia(mes, ano)
+
+    if atual.mes == 1:
+        novo_mes = 12
+        novo_ano = atual.ano - 1
+    else:
+        novo_mes = atual.mes - 1
+        novo_ano = atual.ano
+
+    return {
+        "mes": novo_mes, 
+        "ano": novo_ano
+    }
+
+
+def proximo(mes, ano):
+    atual = obter_ou_criar_competencia(mes, ano)
+
+    if atual.mes == 12:
+        novo_mes = 1
+        novo_ano = atual.ano + 1
+    else:
+        novo_mes =  atual.mes + 1
+        novo_ano = atual.ano
+
+    return {
+        "mes": novo_mes, 
+        "ano": novo_ano
+    }

@@ -1,8 +1,8 @@
 from django.db import models
 
 class Competencia(models.Model):
-    mes = models.DateField()
-    ano = models.DateField()
+    mes = models.PositiveSmallIntegerField()
+    ano = models.PositiveSmallIntegerField()
 
     class Meta:
         unique_together = ('mes', 'ano')
@@ -10,3 +10,28 @@ class Competencia(models.Model):
 
     def __str__(self):
         return f'{self.mes:02d}/{self.ano}'
+    
+    def mes_nome(self):
+        MESES = [
+            '', 'Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun',
+            'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'
+        ]
+        return MESES[self.mes]
+    
+
+    def anterior(self):
+        if self.mes <= 1:
+            ano -= self.ano
+
+        mes -= self.mes
+
+        return mes, ano
+
+
+    def proximo(self):
+        if mes == 12:
+            ano += self.ano
+
+        mes += self.mes
+
+        return mes, ano
