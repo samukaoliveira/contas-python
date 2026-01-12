@@ -4,7 +4,7 @@ from contas.models import Lancamento
 def get_lancamentos(competencia):
     return Lancamento.objects.filter(
             data__month = competencia.mes,
-            data__year = competencia.ano) or None
+            data__year = competencia.ano)
 
 
 def get_despesas_competencia(competencia):

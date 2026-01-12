@@ -1,33 +1,295 @@
-<html>
-    <body>
-        
-        <h1><a href="{% url 'home_path' %}?mes={{ anterior.mes }}&ano={{ anterior.ano }}">
-                ⬅
-            </a>&nbsp&nbsp {{ competencia.mes_nome }}/{{ competencia.ano }} &nbsp&nbsp
-            <a href="{% url 'home_path' %}?mes={{ proximo.mes }}&ano={{ proximo.ano }}">
-                ➡
-            </a>
-        </h1>
-        <table>
-            <th>Data</th>
-            <th>Lançamento</th>
-            <th>Valor</th>
-            <th>Pago</th>
-            <tbody>
-                {% for l in lancamentos %}
-                <tr>
-                    <td>{{ l.data }}</td>
-                    <td>{{ l.descricao }}</td>
-                    <td>{{ l.valor }}</td>
-                    <td>{{ l.pago }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Finanças</title>
 
-        <p>{{ receitas_previstas }}</p>
-        <p>{{ despesas_previstas }}</p>
-        <p>{{ receitas_realizadas }}</p>
-        <p>{{ despesas_realizadas }}</p>
-    </body>
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+
+    <style>
+        :root {
+            --verde-principal: #1b5e20;
+            --verde-claro: #43a047;
+            --verde-agua: #66bb6a;
+            --amarelo: #fbc02d;
+            --cinza-bg: #f4f6f5;
+            --cinza-texto: #444;
+            --cinza-texto-hover: #636363;
+            --branco: #ffffff;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--cinza-bg);
+            margin: 0;
+            padding: 24px;
+            color: var(--cinza-texto);
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            align-items: center;
+            padding: 16px 24px;
+            margin-bottom: 32px;
+        }
+
+        .menu,
+        .login {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .menu-btn {
+            font-size: 1.6rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #2e7d32;
+        }
+
+        .menu-btn:hover {
+            color: #43a047;
+        }
+
+
+
+        .competencia {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 24px;
+        }
+
+        .competencia a {
+            color: var(--verde-principal);
+            font-size: 22px;
+            text-decoration: none;
+        }
+
+        .competencia h1 {
+            margin: 0;
+            font-size: 28px;
+            color: var(--verde-principal);
+            font-weight: 600;
+        }
+
+        .logout-btn {
+            background-color: var(--cinza-texto);
+            color: white;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .logout-btn:hover {
+            background-color: var(--cinza-texto-hover);
+        }
+
+        .acoes {
+            display: flex;
+            align-items: left;
+            justify-content: left;
+            padding: 16px 16px 16px 0px;
+            gap: 24px;
+        }
+
+        .add-lancamento-btn {
+            background-color: var(--verde-claro);
+            color: white;
+            border: none;
+            padding: 8px 14px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+
+        /* ===== CARDS ===== */
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .card {
+            background: var(--branco);
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 6px 14px rgba(0,0,0,.08);
+        }
+
+        .card h3 {
+            margin: 0 0 8px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #666;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .card p {
+            margin: 0;
+            font-size: 22px;
+            font-weight: 600;
+        }
+
+        .receita { color: var(--verde-claro); }
+        .despesa { color: #d32f2f; }
+
+        /* ===== TABELA ===== */
+        .table-container {
+            background: var(--branco);
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 6px 14px rgba(0,0,0,.08);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: var(--verde-principal);
+            color: var(--branco);
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid #eee;
+        }
+
+        tbody tr:hover {
+            background: #f1f8f4;
+        }
+
+        .valor {
+            font-weight: 600;
+        }
+
+        .pago {
+            color: var(--verde-claro);
+        }
+
+        .nao-pago {
+            color: #d32f2f;
+        }
+    </style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<div class="header">
+    <!-- MENU -->
+    <div class="menu">
+        <button class="menu-btn" aria-label="Menu">
+            ☰
+        </button>
+    </div>
+
+    <!-- COMPETÊNCIA -->
+    <div class="competencia">
+        <a href="{% url 'home_path' %}?mes={{ anterior.mes }}&ano={{ anterior.ano }}">
+            <i class="fa-solid fa-chevron-left"></i>
+        </a>
+
+        <h1>
+            {{ competencia.mes_nome }}/{{ competencia.ano }}
+        </h1>
+
+        <a href="{% url 'home_path' %}?mes={{ proximo.mes }}&ano={{ proximo.ano }}">
+            <i class="fa-solid fa-chevron-right"></i>
+        </a>
+    </div>
+
+    <!-- AÇÕES -->
+    <div class="login">
+        <button class="logout-btn">
+            ⎋ Sair
+        </button>
+    </div>
+</div>
+
+<!-- AÇÕES -->
+ <div class="acoes">
+    <button class="add-lancamento-btn">
+        <i class="fa-solid fa-circle-plus"></i> Novo Lançamento
+    </button>
+</div>
+
+<!-- ===== RESUMO ===== -->
+<div class="cards">
+    <div class="card">
+        <h3><i class="fa-solid fa-arrow-trend-up"></i> Receitas previstas</h3>
+        <p class="receita">R$ {{ receitas_previstas }}</p>
+    </div>
+
+    <div class="card">
+        <h3><i class="fa-solid fa-arrow-trend-down"></i> Despesas previstas</h3>
+        <p class="despesa">R$ {{ despesas_previstas }}</p>
+    </div>
+
+    <div class="card">
+        <h3><i class="fa-solid fa-circle-check"></i> Receitas realizadas</h3>
+        <p class="receita">R$ {{ receitas_realizadas }}</p>
+    </div>
+
+    <div class="card">
+        <h3><i class="fa-solid fa-circle-xmark"></i> Despesas realizadas</h3>
+        <p class="despesa">R$ {{ despesas_realizadas }}</p>
+    </div>
+</div>
+
+<!-- ===== TABELA ===== -->
+<div class="table-container">
+    <table>
+        <thead>
+            <tr>
+                <th>Data</th>
+                <th>Lançamento</th>
+                <th>Valor</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for l in lancamentos %}
+            <tr>
+                <td>{{ l.data|date:"d/m/Y" }}</td>
+                <td>{{ l.descricao }}</td>
+                <td class="valor">R$ {{ l.valor }}</td>
+                <td>
+                    {% if l.pago %}
+                        <span class="pago">
+                            <i class="fa-solid fa-check"></i> Pago
+                        </span>
+                    {% else %}
+                        <span class="nao-pago">
+                            <i class="fa-solid fa-clock"></i> Pendente
+                        </span>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+</body>
 </html>
