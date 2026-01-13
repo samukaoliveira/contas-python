@@ -17,6 +17,7 @@
             --cinza-bg: #f4f6f5;
             --cinza-texto: #444;
             --cinza-texto-hover: #636363;
+            --cinza-shadow: #9e9e9e;
             --branco: #ffffff;
         }
 
@@ -104,9 +105,16 @@
             background-color: var(--verde-claro);
             color: white;
             border: none;
-            padding: 8px 14px;
+            border-radius: 5px;
+            box-shadow: 0 3px 8px var(--cinza-shadow);
+            padding: 8px 16px;
+            margin-bottom: 18px;
             cursor: pointer;
             font-size: 0.9rem;
+        }
+
+        .add-lancamento-btn:hover {
+            background-color: var(--verde-principal);
         }
 
 
@@ -139,6 +147,10 @@
             margin: 0;
             font-size: 22px;
             font-weight: 600;
+        }
+
+        .saldo h3 {
+            font-size: 18px;
         }
 
         .receita { color: var(--verde-claro); }
@@ -236,6 +248,12 @@
 
 <!-- ===== RESUMO ===== -->
 <div class="cards">
+
+    <div class="card saldo">
+        <h3><i class="fa-solid fa-sack-dollar"></i> Saldo em Caixa</h3>
+        <p class="despesa">R$ {{ despesas_realizadas }}</p>
+    </div>
+
     <div class="card">
         <h3><i class="fa-solid fa-arrow-trend-up"></i> Receitas previstas</h3>
         <p class="receita">R$ {{ receitas_previstas }}</p>
