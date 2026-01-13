@@ -26,4 +26,7 @@ class Lancamento(models.Model):
 
     def __str__(self):
         return self.descricao
+    
+    class Meta:
+        ordering = ['data']
         

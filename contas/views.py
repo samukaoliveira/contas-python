@@ -1,3 +1,3 @@
-from contas.views import index
+from contas.views import index, lancamentos
 
 

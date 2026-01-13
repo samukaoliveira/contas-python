@@ -16,11 +16,16 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from contas.views import index
+from contas.views import index, lancamentos, cartoes
 from django.views.generic import RedirectView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', RedirectView.as_view(url='/home/', permanent=False)),
     path('home/', index.home, name='home_path'),
+    path('update/<int:pk>/', lancamentos.update, name='lancamentos_update_path'),
+    path('lancamentos/create/', lancamentos.create, name='lancamentos_create_path'),
+    path('cartoes/', cartoes.home, name='cartoes_path'),
+    path('cartoes/create/', cartoes.create, name='cartoes_create_path'),
+    path('cartoes/<int:pk>/edit/', cartoes.edit, name='cartoes_edit_path'),
 ]

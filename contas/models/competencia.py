@@ -19,19 +19,3 @@ class Competencia(models.Model):
         return MESES[self.mes]
     
 
-    def anterior(self):
-        if self.mes <= 1:
-            ano -= self.ano
-
-        mes -= self.mes
-
-        return mes, ano
-
-
-    def proximo(self):
-        if mes == 12:
-            ano += self.ano
-
-        mes += self.mes
-
-        return mes, ano
