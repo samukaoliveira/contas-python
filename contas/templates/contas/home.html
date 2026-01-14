@@ -387,7 +387,11 @@
 
     <div class="card saldo">
         <h3><i class="fa-solid fa-sack-dollar"></i> Saldo em Caixa</h3>
-        <p class="despesa">R$ {{ despesas_realizadas }}</p>
+        {% if saldo_em_caixa < 0 %}
+            <p class="despesa">R$ {{ saldo_em_caixa }}</p>
+        {% else %}
+            <p class="receita">R$ {{ saldo_em_caixa }}</p>
+        {% endif %}
     </div>
 
     <div class="card">

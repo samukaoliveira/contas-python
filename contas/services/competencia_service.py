@@ -83,3 +83,7 @@ def soma_lancamentos(lancamentos):
         soma += l.valor
 
     return soma
+
+
+def saldo_em_caixa(competencia):
+    return total_receitas_realizadas(competencia) - total_despesas_realizadas(competencia)

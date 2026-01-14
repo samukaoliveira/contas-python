@@ -34,6 +34,7 @@ def home(request):
         'despesas_previstas': competencia_service.total_despesas_previstas(competencia),
         'receitas_realizadas': competencia_service.total_receitas_realizadas(competencia),
         'despesas_realizadas': competencia_service.total_despesas_realizadas(competencia),
+        'saldo_em_caixa': competencia_service.saldo_em_caixa(competencia),
         'form_action': "lancamentos_create_path",
         'path': reverse('home_path', args=None),
         'cartao': None,
@@ -41,6 +42,8 @@ def home(request):
         'titulo': f"Lançamentos - { competencia.mes_nome() }/{ competencia.ano }",
         'titulo_tem_setas': True
     })
+
+
 
 
 
