@@ -365,9 +365,7 @@
     {% include "contas/shared/_menu.html" %}
 
     <!-- COMPETÊNCIA -->
-    {% with titulo="Cartão - "|add:cartao.descricao|add:" - "|add:fatura.competencia.mes|add:"/"|add:fatura.competencia.ano %}
-        {% include "contas/shared/_competencia.html" with h1=titulo %}
-    {% endwith %}
+    {% include "contas/shared/_competencia.html" %}
 
 
      

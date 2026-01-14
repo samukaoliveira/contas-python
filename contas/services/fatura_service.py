@@ -37,3 +37,7 @@ def get_receitas_fatura(fatura):
 def total_fatura(fatura):
 
     return get_receitas_fatura(fatura) - get_despesas_fatura(fatura)
+
+
+def total_fatura_por_cartao(cartao, competencia):
+    return total_fatura(obter_ou_criar_fatura(cartao, competencia))

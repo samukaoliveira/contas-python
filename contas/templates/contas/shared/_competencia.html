@@ -1,14 +1,19 @@
 <!-- COMPETÊNCIA -->
     <div class="competencia">
-        <a href="{% url path pk %}?mes={{ anterior.mes }}&ano={{ anterior.ano }}">
-            <i class="fa-solid fa-chevron-left"></i>
+        <a href="{{ path }}?mes={{ anterior.mes }}&ano={{ anterior.ano }}">
+
+            {% if titulo_tem_setas %}
+                <i class="fa-solid fa-chevron-left"></i>
+            {% endif %}
         </a>
 
-        <h1>
-           Titulo
+        <h1 id="titulo">{{ titulo }}
         </h1>
 
-        <a href="{% url path pk %}?mes={{ proximo.mes }}&ano={{ proximo.ano }}">
-            <i class="fa-solid fa-chevron-right"></i>
+        <a href="{{ path }}?mes={{ proximo.mes }}&ano={{ proximo.ano }}">
+                    
+            {% if titulo_tem_setas %}
+                <i class="fa-solid fa-chevron-right"></i>
+            {% endif %}
         </a>
     </div>

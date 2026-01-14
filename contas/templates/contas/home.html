@@ -424,6 +424,16 @@
             </tr>
         </thead>
         <tbody>
+        {% for c in cartoes %}
+            <tr>
+                <td>{{ c.vencimento }}/{{ competencia.mes }}/{{ competencia.ano }}</td>
+                <td>Cartão {{ c.descricao }}</td>
+                <td class="valor">R$ {{ c.fatura }}</td>
+                <td>DESPESA</td>
+                <td>
+                </td>
+            </tr>
+        {% endfor %}
         {% for l in lancamentos %}
             <tr>
                 <td>{{ l.data|date:"d/m/Y" }}</td>

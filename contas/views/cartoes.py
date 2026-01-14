@@ -4,13 +4,17 @@ from contas.views.cartao_form import CartaoFrom
 from datetime import date
 from contas.models import Cartao, Fatura, Lancamento
 from contas.services import competencia_service, fatura_service
+from django.urls import reverse
 
 def home(request):
 
     cartoes = Cartao.objects.all
 
     return render(request, 'contas/cartoes.html', {
-        'cartoes': cartoes
+        'cartoes': cartoes,
+        'path': "cartoes_path",
+        'titulo': "Cartões",
+        'titulo_tem_setas': False
     })
 
 def show(request, pk):
@@ -45,8 +49,10 @@ def show(request, pk):
         'form_action': "cartao_lancamento_create_path",
         'anterior': competencia_service.anterior(mes, ano),
         'proximo': competencia_service.proximo(mes, ano),
-        'path': "cartao_show_path",
-        'pk': cartao.id
+        'path': reverse('cartao_show_path', args=[cartao.id]),
+        'pk': cartao.id,
+        'titulo': f"Cartão - { cartao.descricao } - { competencia.mes_nome() }/{ competencia.ano }",
+        'titulo_tem_setas': True
     })
 
 def create(request):

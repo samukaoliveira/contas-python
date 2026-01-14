@@ -365,11 +365,7 @@
     {% include "contas/shared/_menu.html" %}
 
     <!-- COMPETÊNCIA -->
-    <div class="competencia">
-        <h1>
-            Cartões
-        </h1>
-    </div>
+    {% include "contas/shared/_competencia.html" %}
 
     <!-- AÇÕES -->
     <div class="login">
@@ -426,8 +422,14 @@
                         '{{ c.fechamento }}',
                         '{{ c.vencimento }}')">
                         <i class="fa-solid fa-pen"></i>
-                    </button></td>
-                <td><a href="{% url 'cartao_show_path' c.id %}">  </a></td>
+                    </button>
+                    <a href="{% url 'cartao_show_path' c.id %}">
+                        <button>
+                            <i class="fa-solid fa-eye"></i>
+                        </button>
+                    </a>
+                </td>
+                <td></td>
             </tr>
         {% endfor %}
         </tbody>

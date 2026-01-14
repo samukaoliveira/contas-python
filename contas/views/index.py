@@ -1,7 +1,8 @@
 from django.shortcuts import redirect, render
-from contas.services import competencia_service
+from contas.services import competencia_service, fatura_service
 from datetime import date
-from contas.models import Lancamento
+from contas.models import Lancamento, Cartao
+from django.urls import reverse
 
 def home(request):
     hoje = date.today()
@@ -19,6 +20,11 @@ def home(request):
         fatura = None
     )
 
+    cartoes = Cartao.objects.all()
+
+    for c in cartoes:
+        c.fatura = fatura_service.total_fatura_por_cartao(c, competencia)
+
     return render(request, 'contas/home.html', {
         'competencia': competencia,
         'lancamentos': lancamentos,
@@ -29,8 +35,11 @@ def home(request):
         'receitas_realizadas': competencia_service.total_receitas_realizadas(competencia),
         'despesas_realizadas': competencia_service.total_despesas_realizadas(competencia),
         'form_action': "lancamentos_create_path",
-        'competencia_path': "home_path",
-        'pk': None
+        'path': reverse('home_path', args=None),
+        'cartao': None,
+        'cartoes': cartoes,
+        'titulo': f"Lançamentos - { competencia.mes_nome() }/{ competencia.ano }",
+        'titulo_tem_setas': True
     })
 
 
