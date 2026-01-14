@@ -365,7 +365,13 @@
     {% include "contas/shared/_menu.html" %}
 
     <!-- COMPETÊNCIA -->
-    {% include "contas/shared/_competencia.html" %}
+    {% with titulo="Cartão - "|add:cartao.descricao|add:" - "|add:fatura.competencia.mes|add:"/"|add:fatura.competencia.ano %}
+        {% include "contas/shared/_competencia.html" with h1=titulo %}
+    {% endwith %}
+
+
+     
+
 
     <!-- AÇÕES -->
     <div class="login">
@@ -386,28 +392,18 @@
 <div class="cards">
 
     <div class="card saldo">
-        <h3><i class="fa-solid fa-sack-dollar"></i> Saldo em Caixa</h3>
-        <p class="despesa">R$ {{ despesas_realizadas }}</p>
+        <h3><i class="fa-solid fa-sack-dollar"></i> Fatura Atual</h3>
+        <p class="despesa">R$ {{ total_fatura }}</p>
     </div>
 
     <div class="card">
-        <h3><i class="fa-solid fa-arrow-trend-up"></i> Receitas previstas</h3>
-        <p class="receita">R$ {{ receitas_previstas }}</p>
+        <h3><i class="fa-solid fa-arrow-trend-up"></i> Limite Disponível</h3>
+        <p class="receita">R$ {{ cartao.limite }}</p>
     </div>
 
     <div class="card">
-        <h3><i class="fa-solid fa-arrow-trend-down"></i> Despesas previstas</h3>
-        <p class="despesa">R$ {{ despesas_previstas }}</p>
-    </div>
-
-    <div class="card">
-        <h3><i class="fa-solid fa-circle-check"></i> Receitas realizadas</h3>
-        <p class="receita">R$ {{ receitas_realizadas }}</p>
-    </div>
-
-    <div class="card">
-        <h3><i class="fa-solid fa-circle-xmark"></i> Despesas realizadas</h3>
-        <p class="despesa">R$ {{ despesas_realizadas }}</p>
+        <h3><i class="fa-solid fa-arrow-trend-up"></i> Compras parceladas</h3>
+        <p class="receita">R$ {{ cartao.limite }}</p>
     </div>
 </div>
 

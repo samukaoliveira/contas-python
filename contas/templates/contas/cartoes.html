@@ -362,11 +362,7 @@
     </button>
 
     <!-- MENU LATERAL -->
-    <nav id="navLinks" class="nav-links">
-        <a href="#"><i class="fa-solid fa-house"></i> Início</a>
-        <a href="#"><i class="fa-solid fa-money-check"></i> Lançamentos</a>
-        <a href="#"><i class="fa-solid fa-credit-card"></i> Cartões</a>
-    </nav>
+    {% include "contas/shared/_menu.html" %}
 
     <!-- COMPETÊNCIA -->
     <div class="competencia">
@@ -386,7 +382,7 @@
 <!-- AÇÕES -->
  <div class="acoes">
     <button class="add-lancamento-btn" onclick="openModal()">
-        <i class="fa-solid fa-circle-plus"></i> Novo Lançamento
+        <i class="fa-solid fa-circle-plus"></i> Novo Cartão
     </button>
 </div>
 
@@ -431,6 +427,7 @@
                         '{{ c.vencimento }}')">
                         <i class="fa-solid fa-pen"></i>
                     </button></td>
+                <td><a href="{% url 'cartao_show_path' c.id %}">  </a></td>
             </tr>
         {% endfor %}
         </tbody>

@@ -5,15 +5,23 @@ from datetime import date
 from contas.models import Lancamento
 
 def create(request):
+    salva_lancamento(request)
+    return redirect("home_path")
+        
 
+def create_cartao(request, pk):
+
+    salva_lancamento(request)
+    return redirect("cartao_show_path", pk=pk)
+
+
+def salva_lancamento(request):
     if request.method == 'POST':
 
-        form = LancamentoForm(request.POST)
+            form = LancamentoForm(request.POST)
 
-        if form.is_valid():
-            form.save()
-        
-    return redirect("home_path")
+            if form.is_valid():
+                form.save()
 
 
 def update(request, pk):

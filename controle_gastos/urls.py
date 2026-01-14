@@ -25,7 +25,9 @@ urlpatterns = [
     path('home/', index.home, name='home_path'),
     path('update/<int:pk>/', lancamentos.update, name='lancamentos_update_path'),
     path('lancamentos/create/', lancamentos.create, name='lancamentos_create_path'),
+    path('cartoes/<int:pk>/lancamento/create/', lancamentos.create_cartao, name='cartao_lancamento_create_path'),
     path('cartoes/', cartoes.home, name='cartoes_path'),
     path('cartoes/create/', cartoes.create, name='cartoes_create_path'),
     path('cartoes/<int:pk>/edit/', cartoes.edit, name='cartoes_edit_path'),
+    path('cartoes/<int:pk>/', cartoes.show, name='cartao_show_path'),
 ]

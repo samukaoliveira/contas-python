@@ -15,7 +15,8 @@ def home(request):
 
     lancamentos = Lancamento.objects.filter(
         data__month=competencia.mes,
-        data__year=competencia.ano
+        data__year=competencia.ano,
+        fatura = None
     )
 
     return render(request, 'contas/home.html', {
@@ -27,6 +28,9 @@ def home(request):
         'despesas_previstas': competencia_service.total_despesas_previstas(competencia),
         'receitas_realizadas': competencia_service.total_receitas_realizadas(competencia),
         'despesas_realizadas': competencia_service.total_despesas_realizadas(competencia),
+        'form_action': "lancamentos_create_path",
+        'competencia_path': "home_path",
+        'pk': None
     })
 
 

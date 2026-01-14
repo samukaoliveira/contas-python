@@ -19,4 +19,4 @@ class Fatura(models.Model):
         ]
 
     def __str__(self):
-        return f'{self.cartao}/{self.mes:02d}'
+        return f'{self.cartao}/{self.competencia}'

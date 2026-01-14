@@ -49,13 +49,17 @@ def proximo(mes, ano):
 
 
 def total_receitas_previstas(competencia):
-    lancamentos = lancamento_service.get_receitas_competencia(competencia)
+    lancamentos = lancamento_service.get_receitas_competencia(competencia).filter(
+        fatura = None
+    )
 
     return soma_lancamentos(lancamentos)
 
 
 def total_despesas_previstas(competencia):
-    lancamentos = lancamento_service.get_despesas_competencia(competencia)
+    lancamentos = lancamento_service.get_despesas_competencia(competencia).filter(
+        fatura = None
+    )
 
     return soma_lancamentos(lancamentos)
 
