@@ -37,7 +37,7 @@
 </div>
 
 <!-- AÇÕES -->
- <div class="acoes">
+ <div class="novo">
     <button class="add-lancamento-btn" onclick="openModal()">
         <i class="fa-solid fa-circle-plus"></i> Novo Lançamento
     </button>
@@ -102,6 +102,9 @@
                 <td>DESPESA</td>
                 <td>
                 </td>
+                <td><span><button class="acao edit" onclick="openModalFatura()">
+                        <i class="fa-solid fa-pen"></i>
+                    </button></span>
             </tr>
         {% endfor %}
         {% for l in lancamentos %}
@@ -125,7 +128,7 @@
                         </span>
                     {% endif %}
                 </td>
-                <td><button onclick="openEditModal(
+                <td><span><button class="acao edit" onclick="openEditModal(
                         '{{ l.id }}',
                         '{{ l.data|escapejs }}',
                         '{{ l.descricao }}',
@@ -133,11 +136,14 @@
                         '{{ l.natureza }}',
                         '{{ l.pago }}')">
                         <i class="fa-solid fa-pen"></i>
-                    </button>
-                </td>
-                <td><a href="{% url 'lancamentos_delete_path' l.id %}">
-                        <i class="fa-solid fa-pen"></i>
-                    </button>
+                    </button></span>
+                    <span>
+                        <a href="{% url 'lancamentos_delete_path' l.id %}">
+                            <button class="acao delete">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </button>
+                        </a>
+                    </span>
                 </td>
             </tr>
         {% endfor %}
@@ -146,6 +152,7 @@
 </div>
 
 {% include "contas/shared/_modal_lancamentos.html" %}
+{% include "contas/shared/_modal_pagar_fatura.html" %}
 
 <script>
     function openModal() {
@@ -153,7 +160,10 @@
     }
 
     function closeModal() {
-        document.getElementById('modalLancamento').style.display = 'none';
+        const modal = document.getElementById('modalLancamento');
+        const form = document.querySelector("#modalLancamento form");
+        form.reset();
+        modal.style.display = 'none';
     }
 
     function toggleMenu() {
@@ -175,6 +185,14 @@
 
     openModal();
 }
+
+     function openModalFatura() {
+        document.getElementById('modalPagarFatura').style.display = 'flex';
+    }
+
+     function openModalFatura() {
+        document.getElementById('modalPagarFatura').style.display = 'flex';
+    }
 
 </script>
 

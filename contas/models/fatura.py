@@ -9,6 +9,8 @@ class Fatura(models.Model):
         'contas.Competencia',
         on_delete=models.CASCADE
     )
+    valor_pago = models.FloatField(null=True)
+    data_pagamento = models.DateField(null=True)
 
     class Meta:
         constraints = [

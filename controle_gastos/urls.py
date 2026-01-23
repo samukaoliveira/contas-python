@@ -31,4 +31,5 @@ urlpatterns = [
     path('cartoes/<int:pk>/edit/', cartoes.edit, name='cartoes_edit_path'),
     path('cartoes/<int:pk>/', cartoes.show, name='cartao_show_path'),
     path('lancamentos/<int:pk>/delete/', lancamentos.delete, name='lancamentos_delete_path'),
+    path('cartoes/pagar_fatura/', cartoes.pagar_fatura, name='pagar_fatura_path'),
 ]

@@ -162,7 +162,10 @@
     }
 
     function closeModal() {
-        document.getElementById('modalLancamento').style.display = 'none';
+        const modal = document.getElementById('modalLancamento');
+        const form = document.querySelector("#modalLancamento form");
+        form.reset();
+        modal.style.display = 'none';
     }
 
     function toggleMenu() {

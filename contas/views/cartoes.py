@@ -1,6 +1,7 @@
 from django.shortcuts import redirect, render
 from contas.services import competencia_service
 from contas.views.cartao_form import CartaoFrom
+from contas.views.pagar_fatura_form import PagarFaturaFrom
 from datetime import date
 from contas.models import Cartao, Fatura, Lancamento
 from contas.services import competencia_service, fatura_service
@@ -94,6 +95,17 @@ def update(request, pk):
         form.save()
 
     return redirect('cartoes_path')
+
+def pagar_fatura(request):
+
+    if request.method == 'POST':
+
+        form = PagarFaturaFrom(request.POST)
+
+        if form.is_valid():
+            form.save()
+        
+    return redirect("home_path")
 
 
 

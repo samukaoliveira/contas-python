@@ -1,0 +1,38 @@
+<!-- MODAL -->
+<div id="modalPagarFatura" class="modal">
+    <div class="modal-content">
+        <header class="modal-header">
+            <h2>Pagar Fatura</h2>
+            <button class="close-btn" onclick="closeModalFatura()">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </header>
+
+        <form method="post" action="{% url 'pagar_fatura_path' %}">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label>Valor a Pagar</label>
+                <input type="number" step="0.01" name="valor" required>
+            </div>
+
+            <div class="form-group">
+                <input type="hidden" name="fatura" value="{{ fatura.id }}">
+            </div>
+
+            <div class="form-group">
+                <label>Data</label>
+                <input type="date" name="data" required>
+            </div>
+
+            <footer class="modal-footer">
+                <button type="button" class="btn-secondary" onclick="closeModalFatura()">
+                    Cancelar
+                </button>
+                <button type="submit" class="btn-primary">
+                    Salvar
+                </button>
+            </footer>
+        </form>
+    </div>
+</div>
