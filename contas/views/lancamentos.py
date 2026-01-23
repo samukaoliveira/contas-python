@@ -39,6 +39,14 @@ def update(request, pk):
     return redirect('home_path')
 
 
+def delete(request, pk):
+    lancamento = Lancamento.objects.get(pk = pk)
+
+    if lancamento != None:
+          lancamento.delete()
+
+    return redirect('home_path')
+
 
 
 

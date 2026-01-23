@@ -30,4 +30,5 @@ urlpatterns = [
     path('cartoes/create/', cartoes.create, name='cartoes_create_path'),
     path('cartoes/<int:pk>/edit/', cartoes.edit, name='cartoes_edit_path'),
     path('cartoes/<int:pk>/', cartoes.show, name='cartao_show_path'),
+    path('lancamentos/<int:pk>/delete/', lancamentos.delete, name='lancamentos_delete_path'),
 ]
