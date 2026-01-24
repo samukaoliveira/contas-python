@@ -1,4 +1,6 @@
 {% load static %}
+{% load humanize %}
+
 
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -112,9 +114,9 @@
                 <td>{{ l.data|date:"d/m/Y" }}</td>
                 <td>{{ l.descricao }}</td>
                 <td class="valor"> {% if l.natureza == "DESPESA" %}
-                                        <span class="despesa">R$ -{{ l.valor }}</span>
+                                        <span class="despesa">R$ -{{ l.valor|floatformat:2|intcomma }}</span>
                                     {% else %}
-                                        <span class="receita"></span>R$ {{ l.valor }}</span>
+                                        <span class="receita"></span>R$ {{ l.valor|floatformat:2|intcomma }}</span>
                                     {% endif %}</td>
                 <td>{{ l.natureza }}</td>
                 <td>
@@ -160,10 +162,9 @@
     }
 
     function closeModal() {
-        const modal = document.getElementById('modalLancamento');
         const form = document.querySelector("#modalLancamento form");
         form.reset();
-        modal.style.display = 'none';
+        document.getElementById('modalLancamento').style.display = 'none';
     }
 
     function toggleMenu() {
@@ -175,11 +176,13 @@
 
     form.action = `/update/${id}/`;
 
+    form.data.value = data;
     form.descricao.value = descricao;
-    form.valor.value = valor;
+    form.valor.value = parseFloat(valor.replace(',', '.'));
     form.natureza.value = natureza;
     form.pago.checked = pago === 'True' || pago === true;
-    form.data.value = data;
+
+
 
     document.querySelector('#modalLancamento h2').innerText = 'Editar Lançamento';
 
@@ -190,8 +193,10 @@
         document.getElementById('modalPagarFatura').style.display = 'flex';
     }
 
-     function openModalFatura() {
-        document.getElementById('modalPagarFatura').style.display = 'flex';
+     function closeModalFatura() {
+         const form = document.querySelector("#modalPagarFatura form");
+         form.reset();
+         document.getElementById('modalPagarFatura').style.display = 'none';
     }
 
 </script>

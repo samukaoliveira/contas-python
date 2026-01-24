@@ -179,7 +179,7 @@
     form.action = `/cartoes/${id}/edit/`;
 
     form.descricao.value = descricao;
-    form.limite.value = limite;
+    form.limite.value = parseFloat(limite.replace(',', '.'));
     form.fechamento.value = fechamento;
     form.vencimento.value = vencimento;
 
