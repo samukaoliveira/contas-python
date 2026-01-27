@@ -1,11 +1,12 @@
 from .base import *
 import os
+from django.core.management.utils import get_random_secret_key
 
 DEBUG = False
 
-ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "").split(",")
+ALLOWED_HOSTS = ["snfin.samukaoliveira.com.br", "localhost"]
 
-SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
+SECRET_KEY = os.getenv("SECRET_KEY", get_random_secret_key())
 
 SECURE_SSL_REDIRECT = True
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
