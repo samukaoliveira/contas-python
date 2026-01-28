@@ -20,11 +20,12 @@ COPY . .
 # Porta padrão
 EXPOSE 8000
 
+# Copia e define entrypoint
+COPY entrypoint.sh /entrypoint.sh
+
 # Torna executável (opcional se já fez chmod local)
 RUN chmod +x /entrypoint.sh
 
-# Copia e define entrypoint
-COPY entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
 
 # Comando padrão do container
