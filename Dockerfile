@@ -20,6 +20,8 @@ COPY . .
 # Porta padrão
 EXPOSE 8000
 
+RUN pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
+
 # Copia e define entrypoint
 COPY entrypoint.sh /entrypoint.sh
 
