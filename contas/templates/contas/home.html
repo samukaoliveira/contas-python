@@ -59,7 +59,7 @@
 
     <div class="card">
         <h3><i class="fa-solid fa-sack-dollar"></i> Saldo Previsto do Mês</h3>
-        {% if saldo_em_caixa < 0 %}
+        {% if saldo_previsto < 0 %}
             <p class="despesa">R$ {{ saldo_previsto }}</p>
         {% else %}
             <p class="receita">R$ {{ saldo_previsto }}</p>
@@ -114,7 +114,7 @@
                 <td><span><button class="acao edit" onclick="openModalFatura(
                     '{{ c.fatura.id }}',
                     '{{ c.fatura.valor_pago }}',
-                    '{{ c.fatura.data_pagamento }}')">
+                    '{{ c.fatura.data_pagamento|escapejs }}')">
                         <i class="fa-solid fa-hand-holding-dollar"></i> Pagar
                     </button></span>
                 </td>

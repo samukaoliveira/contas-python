@@ -3,7 +3,10 @@ from django.db import models
 class Lancamento(models.Model):
     descricao = models.CharField(max_length=70)
     data = models.DateField()
-    valor = models.FloatField()
+    valor =  models.DecimalField(
+                max_digits=10,
+                decimal_places=2
+    )
     pago = models.BooleanField(default=False)
     fatura = models.ForeignKey(
         'contas.Fatura', 
@@ -12,6 +15,8 @@ class Lancamento(models.Model):
         )
     dt_criacao = models.DateTimeField(auto_now=True)
     dt_update = models.DateTimeField(auto_now=True)
+
+    eh_rotativo = models.BooleanField(default=False)
 
     class Natureza(models.TextChoices):
         DESPESA = 'DESPESA', 'Despesa'

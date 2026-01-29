@@ -9,7 +9,12 @@ class Fatura(models.Model):
         'contas.Competencia',
         on_delete=models.CASCADE
     )
-    valor_pago = models.FloatField(null=True)
+    valor_pago = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        null=True,
+        blank=True
+    )
     data_pagamento = models.DateField(null=True)
 
     class Meta:
