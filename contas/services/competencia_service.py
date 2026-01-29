@@ -81,5 +81,5 @@ def soma_lancamentos(lancamentos):
     return soma
 
 
-def saldo_em_caixa(competencia):
-    return total_receitas_realizadas(competencia) - total_despesas_realizadas(competencia)
+def saldo_previsto(competencia):
+    return total_receitas_previstas(competencia) - total_despesas_previstas(competencia)

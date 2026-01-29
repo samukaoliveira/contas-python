@@ -58,6 +58,15 @@
     </div>
 
     <div class="card">
+        <h3><i class="fa-solid fa-sack-dollar"></i> Saldo Previsto do Mês</h3>
+        {% if saldo_em_caixa < 0 %}
+            <p class="despesa">R$ {{ saldo_previsto }}</p>
+        {% else %}
+            <p class="receita">R$ {{ saldo_previsto }}</p>
+        {% endif %}
+    </div>
+
+    <div class="card">
         <h3><i class="fa-solid fa-arrow-trend-up"></i> Receitas previstas</h3>
         <p class="receita">R$ {{ receitas_previstas }}</p>
     </div>
@@ -102,11 +111,16 @@
                                         <span class="receita"></span>R$ {{ c.fatura }}</span>
                                     {% endif %}</td>
                 <td>DESPESA</td>
-                <td>
-                </td>
                 <td><span><button class="acao edit" onclick="openModalFatura()">
-                        <i class="fa-solid fa-pen"></i>
+                        <i class="fa-solid fa-hand-holding-dollar"></i> Pagar
                     </button></span>
+                </td>
+                <td>
+                    <a href="{% url 'cartao_show_path' c.id %}">
+                        <button class="acao edit">
+                            <i class="fa-solid fa-eye"></i> Ver Fatura
+                        </button>
+                    </a>
             </tr>
         {% endfor %}
         {% for l in lancamentos %}

@@ -1,5 +1,5 @@
 from django.shortcuts import redirect, render
-from contas.services import competencia_service, fatura_service
+from contas.services import competencia_service, fatura_service, lancamento_service
 from datetime import date
 from contas.models import Lancamento, Cartao
 from django.urls import reverse
@@ -34,7 +34,8 @@ def home(request):
         'despesas_previstas': competencia_service.total_despesas_previstas(competencia),
         'receitas_realizadas': competencia_service.total_receitas_realizadas(competencia),
         'despesas_realizadas': competencia_service.total_despesas_realizadas(competencia),
-        'saldo_em_caixa': competencia_service.saldo_em_caixa(competencia),
+        'saldo_previsto': competencia_service.saldo_previsto(competencia),
+        'saldo_em_caixa': lancamento_service.saldo_em_caixa(),
         'form_action': "lancamentos_create_path",
         'path': reverse('home_path', args=None),
         'cartao': None,
