@@ -5,6 +5,12 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["snfin.samukaoliveira.com.br", "localhost", "127.0.0.1", "134.255.176.164"]
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://snfin.samukaoliveira.com.br",
+    "http://134.255.176.164:7000",
+]
+
+
 SECRET_KEY = "django-insecure-dev-only"
 
 
