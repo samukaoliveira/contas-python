@@ -23,7 +23,8 @@ def home(request):
     cartoes = Cartao.objects.all()
 
     for c in cartoes:
-        c.fatura = fatura_service.total_fatura_por_cartao(c, competencia)
+        c.valor_fatura = fatura_service.total_fatura_por_cartao(c, competencia)
+        c.fatura = fatura_service.obter_ou_criar_fatura(c, competencia)
 
     return render(request, 'contas/home.html', {
         'competencia': competencia,

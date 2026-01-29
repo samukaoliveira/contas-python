@@ -100,10 +100,20 @@ def pagar_fatura(request):
 
     if request.method == 'POST':
 
-        form = PagarFaturaFrom(request.POST)
+        fatura_id = request.POST.get('fatura_id')
+        fatura = Fatura.objects.get(pk=fatura_id)
+
+        form = PagarFaturaFrom(request.POST, instance=fatura)
 
         if form.is_valid():
+            print("FORM OK")
+            print(form.cleaned_data)
+            valor_pago = form.cleaned_data['valor_pago']
+            data_pagamento = form.cleaned_data['data_pagamento']
+            fatura_service.pagar_fatura(valor_pago, data_pagamento, fatura.cartao, fatura.competencia)
             form.save()
+        else:
+            print("FORM ERROS:", form.errors)
         
     return redirect("home_path")
 

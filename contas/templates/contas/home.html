@@ -105,13 +105,16 @@
             <tr>
                 <td>{{ c.vencimento }}/{{ competencia.mes }}/{{ competencia.ano }}</td>
                 <td>Cartão {{ c.descricao }}</td>
-                <td class="valor"> {% if c.fatura < 0 %}
-                                        <span class="despesa">R$ {{ c.fatura }}</span>
+                <td class="valor"> {% if c.valor_fatura < 0 %}
+                                        <span class="despesa">R$ {{ c.valor_fatura }}</span>
                                     {% else %}
-                                        <span class="receita"></span>R$ {{ c.fatura }}</span>
+                                        <span class="receita"></span>R$ {{ c.valor_fatura }}</span>
                                     {% endif %}</td>
                 <td>DESPESA</td>
-                <td><span><button class="acao edit" onclick="openModalFatura()">
+                <td><span><button class="acao edit" onclick="openModalFatura(
+                    '{{ c.fatura.id }}',
+                    '{{ c.fatura.valor_pago }}',
+                    '{{ c.fatura.data_pagamento }}')">
                         <i class="fa-solid fa-hand-holding-dollar"></i> Pagar
                     </button></span>
                 </td>
@@ -203,8 +206,13 @@
     openModal();
 }
 
-     function openModalFatura() {
+     function openModalFatura(fatura_id, valor_pago, data_pagamento) {
         document.getElementById('modalPagarFatura').style.display = 'flex';
+        const form = document.querySelector('#modalPagarFatura form');
+
+        form.fatura_id.value = fatura_id;
+        form.valor_pago.value = parseFloat(valor_pago.replace(',', '.'));
+        form.data_pagamento.value = data_pagamento;
     }
 
      function closeModalFatura() {

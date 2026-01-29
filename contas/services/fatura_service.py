@@ -36,14 +36,16 @@ def get_receitas_fatura(fatura):
 
 def total_fatura(fatura):
     soma_fatura = get_receitas_fatura(fatura) - get_despesas_fatura(fatura)
-    return soma_fatura - (fatura.valor_pago or 0)
+    return soma_fatura + (fatura.valor_pago or 0)
 
 
 def total_fatura_por_cartao(cartao, competencia):
     return total_fatura(obter_ou_criar_fatura(cartao, competencia))
 
-def pagar_fatura(valor, cartao, competencia):
+def pagar_fatura(valor, data_pagamento, cartao, competencia):
     fatura = obter_ou_criar_fatura(cartao, competencia)
 
-    if fatura != None & valor != None:
+    if fatura is not None and valor is not None:
         fatura.valor_pago = valor
+        fatura.data_pagamento = data_pagamento
+        fatura.save()
