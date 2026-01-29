@@ -4,7 +4,7 @@ from django.core.management.utils import get_random_secret_key
 
 DEBUG = False
 
-ALLOWED_HOSTS = ["snfin.samukaoliveira.com.br", "localhost"]
+ALLOWED_HOSTS = ["snfin.samukaoliveira.com.br", "localhost", "134.255.176.164"]
 
 SECRET_KEY = os.getenv("SECRET_KEY", get_random_secret_key())
 
