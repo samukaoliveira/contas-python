@@ -1,5 +1,9 @@
 #!/bin/sh
 
+set -e
+
+export DJANGO_SETTINGS_MODULE=${DJANGO_SETTINGS_MODULE:-controle_gastos.settings.production}
+
 echo "Aplicando migrações..."
 python manage.py migrate --noinput
 
