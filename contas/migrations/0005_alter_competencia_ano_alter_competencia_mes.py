@@ -21,3 +21,13 @@
 #             field=models.PositiveSmallIntegerField(),
 #         ),
 #     ]
+from django.db import migrations
+
+
+class Migration(migrations.Migration):
+
+    dependencies = [
+        ("contas", "0004_alter_competencia_options_and_more"),
+    ]
+
+    operations = []
