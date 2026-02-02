@@ -1,0 +1,57 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Algo deu errado 😕</title>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+    
+    <link rel="stylesheet" href="{% static 'contas/app.css' %}">
+
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<div class="header">
+    <!-- BOTÃO MENU -->
+    <button class="menu-btn" onclick="toggleMenu()" aria-label="Menu">
+        <i class="fa-solid fa-bars"></i>
+    </button>
+
+    <!-- MENU LATERAL -->
+    {% include "contas/shared/_menu.html" %}
+
+    <!-- COMPETÊNCIA -->
+    {% include "contas/shared/_competencia.html" %}
+
+
+     
+
+
+    <!-- AÇÕES -->
+    <div class="login">
+        <button class="logout-btn">
+            ⎋ Sair
+        </button>
+    </div>
+</div>
+
+<!-- ===== RESUMO ===== -->
+<div class="cards">
+
+    <div class="card">
+        <div class="box">
+            <h1>Ops 😬</h1>
+            <p>Ocorreu um erro inesperado.</p>
+            <p>Tente novamente em alguns minutos.</p>
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>
