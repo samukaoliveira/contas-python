@@ -1,0 +1,15 @@
+<div class="login">
+    {% if user.is_authenticated %}
+        <a href="{% url 'account_logout' %}">
+            <button class="logout-btn">
+                ⎋ Sair
+            </button>
+        </a>
+    {% else %}
+        <a href="{% url 'account_login' %}">
+            <button class="logout-btn">
+                -> Entrar
+            </button>
+        </a>
+    {% endif %}
+</div>

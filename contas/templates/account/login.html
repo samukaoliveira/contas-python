@@ -1,0 +1,89 @@
+{% load static %}
+{% load socialaccount %}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Login - Finanças</title>
+    <link rel="stylesheet" href="{% static 'contas/app.css' %}">
+</head>
+<body>
+    
+
+    <!-- Container centralizado -->
+    <div class="modal" style="display:flex; align-items:center; justify-content:center; background: var(--cinza-bg); padding:40px;">
+
+        <div class="modal-content">
+
+            <!-- Logo -->
+            <div class="header-logo">
+                <img src="{% static 'contas/imagens/logo_snfin-removebg.png' %}" class="logo-login" alt="SNFin Logo" />
+            </div>
+
+            <!-- Header -->
+            <div class="modal-header">
+                <h2>Entrar</h2>
+            </div>
+
+            <!-- Mensagem de erro -->
+            {% if form.errors %}
+            <div class="alert alert-danger">
+                Usuário ou senha incorretos.
+            </div>
+            {% endif %}
+
+            <!-- Formulário -->
+            <form method="post" action="{% url 'account_login' %}">
+                {% csrf_token %}
+
+                <div class="form-group">
+                    <label for="id_login">Email</label>
+                    {{ form.login }}
+                </div>
+
+                <div class="form-group">
+                    <label for="id_password">Senha</label>
+                    {{ form.password }}
+                </div>
+
+                <div class="form-group">
+                    <label class="form-check-label">
+                        {{ form.remember }}
+                        Lembrar-me
+                    </label>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn-primary">Entrar</button>
+                    <a href="{% url 'account_signup' %}" class="btn-secondary">Criar conta</a>
+                </div>
+            </form>
+
+            <!-- Links adicionais -->
+            <div style="text-align:center; margin-top:12px;">
+                <a href="{% url 'account_reset_password' %}">Esqueceu a senha?</a>
+            </div>
+
+            <!-- Social login (opcional) -->
+            {% if socialaccount_providers %}
+            <div class="social-login" style="margin-top:15px; text-align:center;">
+                <p>Ou entre com:</p>
+                {% providers_media_js %}
+                {% for provider in socialaccount_providers %}
+                    <a class="btn-primary" href="{% provider_login_url provider.id %}" style="margin:4px;">
+                        {{ provider.name }}
+                    </a>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Script opcional para centralizar modal em tela pequena -->
+    <script>
+        const modal = document.querySelector('.modal');
+        modal.style.minHeight = window.innerHeight + 'px';
+    </script>
+</body>
+</html>

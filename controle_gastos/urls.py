@@ -15,7 +15,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from contas.views import index, lancamentos, cartoes
 from django.views.generic import RedirectView
 
@@ -32,6 +32,7 @@ urlpatterns = [
     path('cartoes/<int:pk>/', cartoes.show, name='cartao_show_path'),
     path('lancamentos/<int:pk>/delete/', lancamentos.delete, name='lancamentos_delete_path'),
     path('cartoes/pagar_fatura/', cartoes.pagar_fatura, name='pagar_fatura_path'),
+    path("accounts/", include("allauth.urls")),
 ]
 
 

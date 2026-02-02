@@ -1,0 +1,59 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Confirmar Logout - Finanças</title>
+    <link rel="stylesheet" href="{% static 'contas/app.css' %}">
+</head>
+<body>
+
+    <!-- Modal centralizado -->
+    <div class="modal" style="display:flex; align-items:center; justify-content:center;">
+        <div class="modal-content">
+
+            <!-- Logo -->
+            <div class="header-logo">
+                <img src="{% static 'contas/imagens/logo_snfin-removebg.png' %}" class="logo-login" alt="SNFin Logo" />
+            </div>
+
+            <!-- Cabeçalho -->
+            <div class="modal-header">
+                <h2>Confirmar Logout</h2>
+            </div>
+
+            <!-- Mensagem -->
+            <p style="color: var(--cinza-texto); font-size:1rem; text-align:center; margin-bottom:20px;">
+                Tem certeza de que deseja sair da sua conta?
+            </p>
+
+            <!-- Botões -->
+            <div class="modal-footer" style="justify-content:center;">
+                <form method="post" action="{% url 'account_logout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn-primary">Sair</button>
+                    <a href="{% url 'home_path' %}" class="btn-secondary">Cancelar</a>
+                </form>
+            </div>
+
+            <!-- Informações do usuário -->
+            <div style="text-align:center; margin-top:15px; color: var(--cinza-texto); font-size:0.9rem;">
+                Conectado como <strong>{{ user.email }}</strong>
+            </div>
+
+            <!-- Menu rápido -->
+            <div style="text-align:center; margin-top:10px; font-size:0.9rem;">
+                <p style="margin-bottom:5px;">Menu rápido:</p>
+                <ul style="list-style:none; padding:0; margin:0;">
+                    <li><a href="{% url 'account_email' %}">Alterar e-mail</a></li>
+                    <li><a href="{% url 'account_change_password' %}">Alterar senha</a></li>
+                    <li><a href="{% url 'socialaccount_connections' %}">Conexões de conta</a></li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>

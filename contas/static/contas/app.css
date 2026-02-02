@@ -18,6 +18,24 @@
             color: var(--cinza-texto);
         }
 
+        /* ===== LOGO LOGIN ===== */
+        .header-logo {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .logo-home {
+            max-width: 150px; /* tamanho do logo */
+            height: auto;
+        }
+        
+        .logo-login {
+            max-width: 200px; /* tamanho do logo */
+            height: auto;
+        }
+
         /* ===== HEADER ===== */
         .header {
             display: grid;

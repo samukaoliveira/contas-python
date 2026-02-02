@@ -1,6 +1,7 @@
+{% load static %}
 <!-- MENU LATERAL -->
     <nav id="navLinks" class="nav-links">
-        <a href="{% url 'home_path' %}"><i class="fa-solid fa-house"></i> Início</a>
+        <a href="{% url 'home_path' %}"><img src="{% static 'contas/imagens/logo_snfin-removebg.png' %}" class="logo-home" alt="SNFin Logo" /></a>
         <a href="{% url 'home_path' %}"><i class="fa-solid fa-money-check"></i> Lançamentos</a>
         <a href="{% url 'cartoes_path' %}"><i class="fa-solid fa-credit-card"></i> Cartões</a>
     </nav>
