@@ -1,12 +1,12 @@
 from .base import *
+import dj_database_url
 import os
-from django.core.management.utils import get_random_secret_key
 
 DEBUG = False
 
 ALLOWED_HOSTS = ["snfin.samukaoliveira.com.br", "localhost", "134.255.176.164"]
 
-SECRET_KEY = os.getenv("SECRET_KEY", get_random_secret_key())
+SECRET_KEY = os.environ["SECRET_KEY"]
 
 SECURE_SSL_REDIRECT = True
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
@@ -28,17 +28,23 @@ ENGINE = "django.db.backends.postgresql"
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": os.environ.get("REDIS_URL"),
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
     }
 }
 
+
+DATABASE_URL = os.environ.get("DATABASE_URL")
+
+if not DATABASE_URL:
+    raise RuntimeError("DATABASE_URL não definida nas variáveis de ambiente")
+
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.environ.get("POSTGRES_DB"),
-        "USER": os.environ.get("POSTGRES_USER"),
-        "PASSWORD": os.environ.get("POSTGRES_PASSWORD"),
-        "HOST": os.environ.get("POSTGRES_HOST", "localhost"),
-        "PORT": os.environ.get("POSTGRES_PORT", "5432"),
-        "CONN_MAX_AGE": 60,  # pooling simples
-    }
+    "default": dj_database_url.config(
+        default=DATABASE_URL,
+        conn_max_age=60,
+        ssl_require=True
+    )
 }

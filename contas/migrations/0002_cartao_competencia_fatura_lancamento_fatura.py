@@ -27,8 +27,8 @@ class Migration(migrations.Migration):
             name='Competencia',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('mes', models.DateField()),
-                ('ano', models.DateField()),
+                ('mes', models.PositiveSmallIntegerField()),
+                ('ano', models.PositiveSmallIntegerField()),
             ],
         ),
         migrations.CreateModel(
