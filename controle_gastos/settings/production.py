@@ -2,7 +2,7 @@ from .base import *
 import dj_database_url
 import os
 
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["snfin.samukaoliveira.com.br", "localhost", "134.255.176.164"]
 
