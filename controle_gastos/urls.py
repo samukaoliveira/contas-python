@@ -33,3 +33,8 @@ urlpatterns = [
     path('lancamentos/<int:pk>/delete/', lancamentos.delete, name='lancamentos_delete_path'),
     path('cartoes/pagar_fatura/', cartoes.pagar_fatura, name='pagar_fatura_path'),
 ]
+
+
+# urls.py
+handler404 = "controle_gastos.views.errors.erro_404"
+handler500 = "controle_gastos.views.errors.erro_500"
