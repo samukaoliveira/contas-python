@@ -36,5 +36,5 @@ urlpatterns = [
 
 
 # urls.py
-handler404 = "controle_gastos.views.errors.erro_404"
-handler500 = "controle_gastos.views.errors.erro_500"
+handler404 = "contas.views.errors.erro_404"
+handler500 = "contas.views.errors.erro_500"
