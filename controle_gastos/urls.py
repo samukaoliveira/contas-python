@@ -33,6 +33,7 @@ urlpatterns = [
     path('lancamentos/<int:pk>/delete/', lancamentos.delete, name='lancamentos_delete_path'),
     path('cartoes/pagar_fatura/', cartoes.pagar_fatura, name='pagar_fatura_path'),
     path("accounts/", include("allauth.urls")),
+    path("health_check/", index.health_check, name='health_check_path'),
 ]
 
 
