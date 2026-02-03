@@ -125,7 +125,7 @@ STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 STATICFILES_DIRS = [
-    "app" / "contas" / "static",
+    "app/contas/static/contas",
 ]
 
 LOGIN_URL = "/accounts/login/"
