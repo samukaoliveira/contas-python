@@ -25,17 +25,6 @@ X_FRAME_OPTIONS = "DENY"
 ENGINE = "django.db.backends.postgresql"
 
 
-CACHES = {
-    "default": {
-        "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": os.environ.get("REDIS_URL"),
-        "OPTIONS": {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient",
-        }
-    }
-}
-
-
 DATABASE_URL = os.environ.get("DATABASE_URL")
 
 if not DATABASE_URL:
