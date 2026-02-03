@@ -2,6 +2,11 @@
 <!-- MENU LATERAL -->
     <nav id="navLinks" class="nav-links">
         <a href="{% url 'home_path' %}"><img src="{% static 'contas/imagens/logo_snfin-removebg.png' %}" class="logo-home" alt="SNFin Logo" /></a>
-        <a href="{% url 'home_path' %}"><i class="fa-solid fa-money-check"></i> Lançamentos</a>
-        <a href="{% url 'cartoes_path' %}"><i class="fa-solid fa-credit-card"></i> Cartões</a>
+        <a href="{% url 'home_path' %} "class="links"><i class="fa-solid fa-money-check"></i> Lançamentos</a>
+        <a href="{% url 'cartoes_path' %}" class="links"><i class="fa-solid fa-credit-card"></i> Cartões</a>
     </nav>
+
+<!-- BOTÃO MENU -->
+    <button class="menu-btn" onclick="toggleMenu()" aria-label="Menu">
+        <i class="fa-solid fa-bars"></i>
+    </button>

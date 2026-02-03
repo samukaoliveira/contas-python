@@ -20,8 +20,9 @@
 
         /* ===== LOGO LOGIN ===== */
         .header-logo {
-            display: flex;
-            justify-content: center;
+            position: relative;
+            display: grid;
+            grid-template-columns: auto 1fr auto;
             align-items: center;
             margin-bottom: 20px;
         }
@@ -38,6 +39,7 @@
 
         /* ===== HEADER ===== */
         .header {
+            position: relative;
             display: grid;
             grid-template-columns: auto 1fr auto;
             align-items: center;
@@ -47,15 +49,20 @@
 
         .menu,
         .login {
+            grid-column: 3;
             display: flex;
             align-items: center;
+            justify-self: end;
             gap: 12px;
         }
 
         .menu-btn {
-            font-size: 1.6rem;
-            background: none;
+            grid-column: 1;
+            display: flex;
+            top: 16px;
+            left: 16px;
             border: none;
+            font-size: 24px;
             cursor: pointer;
             color: #2e7d32;
         }
@@ -67,6 +74,9 @@
 
 
         .competencia {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -152,7 +162,7 @@
         /* ===== CARDS ===== */
         .cards {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
             gap: 16px;
             margin-bottom: 32px;
         }
@@ -358,7 +368,7 @@
         }
 
 
-        @media (max-width: 768px) {
+        @media (orientation: portrait) or (max-width: 768px) {
             .nav-links {
                 display: none;
                 position: absolute;
@@ -375,9 +385,13 @@
             .nav-links.aberto {
                 display: flex;
             }
+
+            .card-none {
+                display: none;
+            }
         }
 
-        @media (min-width: 769px) {
+        @media (orientation: landscape) {
             .menu-btn {
                 display: none;
             }

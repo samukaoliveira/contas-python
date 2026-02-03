@@ -19,10 +19,7 @@
 
 <!-- ===== HEADER ===== -->
 <div class="header">
-    <!-- BOTÃO MENU -->
-    <button class="menu-btn" onclick="toggleMenu()" aria-label="Menu">
-        <i class="fa-solid fa-bars"></i>
-    </button>
+    
 
     <!-- MENU LATERAL -->
     {% include "contas/shared/_menu.html" %}
@@ -73,12 +70,12 @@
         <p class="despesa">R$ {{ despesas_previstas }}</p>
     </div>
 
-    <div class="card">
+    <div class="card card-none">
         <h3><i class="fa-solid fa-circle-check"></i> Receitas realizadas</h3>
         <p class="receita">R$ {{ receitas_realizadas }}</p>
     </div>
 
-    <div class="card">
+    <div class="card card-none">
         <h3><i class="fa-solid fa-circle-xmark"></i> Despesas realizadas</h3>
         <p class="despesa">R$ {{ despesas_realizadas }}</p>
     </div>
@@ -89,10 +86,10 @@
     <table>
         <thead>
             <tr>
-                <th>Data</th>
+                <th class="card-none">Data</th>
                 <th>Lançamento</th>
                 <th>Valor</th>
-                <th>Natureza</th>
+                <th class="card-none">Natureza</th>
                 <th>Status</th>
                 <th>Ações</th>
             </tr>
@@ -100,14 +97,14 @@
         <tbody>
         {% for c in cartoes %}
             <tr>
-                <td>{{ c.vencimento }}/{{ competencia.mes }}/{{ competencia.ano }}</td>
+                <td class="card-none">{{ c.vencimento }}/{{ competencia.mes }}/{{ competencia.ano }}</td>
                 <td>Cartão {{ c.descricao }}</td>
                 <td class="valor"> {% if c.valor_fatura < 0 %}
                                         <span class="despesa">R$ {{ c.valor_fatura }}</span>
                                     {% else %}
                                         <span class="receita"></span>R$ {{ c.valor_fatura }}</span>
                                     {% endif %}</td>
-                <td>DESPESA</td>
+                <td class="card-none">DESPESA</td>
                 <td><span><button class="acao edit" onclick="openModalFatura(
                     '{{ c.fatura.id }}',
                     '{{ c.fatura.valor_pago }}',
@@ -125,14 +122,14 @@
         {% endfor %}
         {% for l in lancamentos %}
             <tr>
-                <td>{{ l.data|date:"d/m/Y" }}</td>
+                <td class="card-none">{{ l.data|date:"d/m/Y" }}</td>
                 <td>{{ l.descricao }}</td>
                 <td class="valor"> {% if l.natureza == "DESPESA" %}
                                         <span class="despesa">R$ -{{ l.valor|floatformat:2|intcomma }}</span>
                                     {% else %}
                                         <span class="receita"></span>R$ {{ l.valor|floatformat:2|intcomma }}</span>
                                     {% endif %}</td>
-                <td>{{ l.natureza }}</td>
+                <td class="card-none">{{ l.natureza }}</td>
                 <td>
                     {% if l.pago %}
                         <span class="pago">
