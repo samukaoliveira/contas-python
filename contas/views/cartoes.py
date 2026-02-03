@@ -6,7 +6,9 @@ from datetime import date
 from contas.models import Cartao, Fatura, Lancamento
 from contas.services import competencia_service, fatura_service
 from django.urls import reverse
+from django.contrib.auth.decorators import login_required
 
+@login_required
 def home(request):
 
     cartoes = Cartao.objects.all
@@ -18,6 +20,7 @@ def home(request):
         'titulo_tem_setas': False
     })
 
+@login_required
 def show(request, pk):
 
     hoje = date.today()
@@ -56,6 +59,7 @@ def show(request, pk):
         'titulo_tem_setas': True
     })
 
+@login_required
 def create(request):
 
     if request.method == 'POST':
@@ -67,7 +71,7 @@ def create(request):
         
     return redirect("cartoes_path")
 
-
+@login_required
 def edit(request, pk):
     data = {}
     lancamento = Cartao.objects.get(
@@ -82,6 +86,7 @@ def edit(request, pk):
 
     return redirect('cartoes_path')
 
+@login_required
 def update(request, pk):
     data = {}
     lancamento = Cartao.objects.get(
@@ -96,6 +101,7 @@ def update(request, pk):
 
     return redirect('cartoes_path')
 
+@login_required
 def pagar_fatura(request):
 
     if request.method == 'POST':

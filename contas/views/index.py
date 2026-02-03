@@ -3,7 +3,9 @@ from contas.services import competencia_service, fatura_service, lancamento_serv
 from datetime import date
 from contas.models import Lancamento, Cartao
 from django.urls import reverse
+from django.contrib.auth.decorators import login_required
 
+@login_required
 def home(request):
     hoje = date.today()
     mes = request.GET.get('mes')
