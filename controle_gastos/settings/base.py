@@ -122,10 +122,10 @@ USE_TZ = True
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / 'controle_gastos' / 'staticfiles'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 STATICFILES_DIRS = [
-    BASE_DIR / "controle_gastos" / "static",
+    BASE_DIR / "contas" / "static",
 ]
 
 LOGIN_URL = "/accounts/login/"
