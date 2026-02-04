@@ -31,7 +31,7 @@
 </div>
 
 <!-- AÇÕES -->
- <div class="acoes">
+ <div class="novo">
     <button class="add-lancamento-btn" onclick="openModal()">
         <i class="fa-solid fa-circle-plus"></i> Novo Lançamento
     </button>
@@ -61,24 +61,24 @@
     <table>
         <thead>
             <tr>
-                <th>Data</th>
+                <th class="card-none">Data</th>
                 <th>Lançamento</th>
                 <th>Valor</th>
-                <th>Natureza</th>
+                <th class="card-none">Natureza</th>
                 <th>Status</th>
             </tr>
         </thead>
         <tbody>
         {% for l in lancamentos %}
             <tr>
-                <td>{{ l.data|date:"d/m/Y" }}</td>
+                <td class="card-none">{{ l.data|date:"d/m/Y" }}</td>
                 <td>{{ l.descricao }}</td>
                 <td class="valor"> {% if l.natureza == "DESPESA" %}
                                         <span class="despesa">R$ -{{ l.valor }}</span>
                                     {% else %}
                                         <span class="receita"></span>R$ {{ l.valor }}</span>
                                     {% endif %}</td>
-                <td>{{ l.natureza }}</td>
+                <td class="card-none">{{ l.natureza }}</td>
                 <td>
                     {% if l.pago %}
                         <span class="pago">

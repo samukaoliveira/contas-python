@@ -55,7 +55,7 @@ def show(request, pk):
         'proximo': competencia_service.proximo(mes, ano),
         'path': reverse('cartao_show_path', args=[cartao.id]),
         'pk': cartao.id,
-        'titulo': f"Cartão - { cartao.descricao } - { competencia.mes_nome() }/{ competencia.ano }",
+        'titulo': f"<span>Cartão - { cartao.descricao }</span><span>{ competencia.mes_nome() }/{ competencia.ano }</span>",
         'titulo_tem_setas': True
     })
 

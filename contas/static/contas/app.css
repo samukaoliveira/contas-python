@@ -395,7 +395,7 @@
         @media (orientation: portrait) or (max-width: 768px) {
 
             body {
-                zoom: 1.7;
+                zoom: 1;
             }
 
             .nav-links {
@@ -419,9 +419,16 @@
                 display: none;
             }
 
+            .cards {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(600px, 1fr));
+                gap: 16px;
+                margin-bottom: 32px;
+            }
+
             .card h3 {
                 margin: 0 0 8px;
-                font-size: 24px;
+                font-size: 36px;
                 font-weight: 500;
                 color: #666;
                 display: flex;
@@ -429,9 +436,17 @@
                 gap: 6px;
             }
 
+            .card p {
+                font-size: 34px;
+            }
+
             th {
-                font-size: 18px;
+                font-size: 28px;
                 font-weight: 600;
+            }
+
+            td {
+                font-size: 26px;
             }
 
 
@@ -439,10 +454,22 @@
                 display: flex;
                 align-items: center;
                 justify-content: center;
+                
+            }
+
+            .competencia h1 {
+                margin: 0;
+                font-size: 40px;
+                color: var(--verde-principal);
+                font-weight: 600;
+            }
+
+            .competencia a {
+                font-size: 40px;
             }
 
             .add-lancamento-btn {
-                font-size: 1.3rem;
+                font-size: 2rem;
             }
 
             .td-mobile {
@@ -451,6 +478,24 @@
 
             .td-desktop {
                 display: none;
+            }
+
+            .menu-btn, .logout-btn {
+                font-size: 42px;
+            }
+
+            .logout-btn {
+                font-size: 26px;
+            }
+
+            .nav-links a {
+                font-size: 40px;
+                padding: 16px;
+            }
+
+            .logo-home {
+                max-width: 250px; /* tamanho do logo */
+                height: auto;
             }
         }
 
