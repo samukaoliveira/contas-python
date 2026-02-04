@@ -17,10 +17,6 @@
 
 <!-- ===== HEADER ===== -->
 <div class="header">
-    <!-- BOTÃO MENU -->
-    <button class="menu-btn" onclick="toggleMenu()" aria-label="Menu">
-        <i class="fa-solid fa-bars"></i>
-    </button>
 
     <!-- MENU LATERAL -->
     {% include "contas/shared/_menu.html" %}
@@ -61,8 +57,8 @@
             <tr>
                 <th>Nome</th>
                 <th>Limite</th>
-                <th>Fechamento</th>
-                <th>Vencimento</th>
+                <th><span class="td-desktop">Fechamento</span><span class="td-mobile">Fecha</span></th>
+                <th><span class="td-desktop">Vencimento</span><span class="td-mobile">Vence</span></th>
                 <th>Ações</th>
             </tr>
         </thead>

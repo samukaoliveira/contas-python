@@ -44,7 +44,7 @@ def home(request):
         'path': reverse('home_path', args=None),
         'cartao': None,
         'cartoes': cartoes,
-        'titulo': f"Lançamentos - { competencia.mes_nome() }/{ competencia.ano }",
+        'titulo': f"<span class='titulo'>Lançamentos </span><span> { competencia.mes_nome() }/{ competencia.ano }</span>",
         'titulo_tem_setas': True
     })
 
