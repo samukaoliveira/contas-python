@@ -130,7 +130,7 @@
             font-size: 0.9rem;
         }
 
-        .acao {
+        .acao, .acao-cartao {
             border-radius: 5px;
             border-color: var(--verde-claro);
             display: inline;
@@ -391,6 +391,8 @@
             display: block;
         }
 
+        /* INÍCIO DO MOBILE */
+
 
         @media (orientation: portrait) or (max-width: 768px) {
 
@@ -422,6 +424,7 @@
             .cards {
                 display: grid;
                 grid-template-columns: repeat(auto-fit, minmax(600px, 1fr));
+                border-radius: 22px;
                 gap: 24px;
                 margin-bottom: 32px;
             }
@@ -438,18 +441,21 @@
 
             .card p {
                 margin-top: 20px;
-                font-size: 34px;
+                font-size: 46px;
             }
 
             th {
-                font-size: 28px;
+                font-size: 32px;
                 font-weight: 600;
             }
 
             td {
-                font-size: 26px;
+                font-size: 32px;
             }
 
+            .lancamento {
+                min-width: 350px;
+            }
 
             .titulo span {
                 display: flex;
@@ -472,6 +478,7 @@
             .add-lancamento-btn {
                 margin-top: 10px;
                 font-size: 2.2rem;
+                border-radius: 10px;
             }
 
             .td-mobile {
@@ -483,7 +490,12 @@
             }
 
              .acao {
-                font-size: 20px;
+                font-size: 30px;
+                margin-left: 5px;
+            }
+
+            .acao-cartao {
+                font-size: 24px;
             }
 
             .menu-btn {
