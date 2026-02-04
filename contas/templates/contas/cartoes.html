@@ -69,7 +69,7 @@
                 <td class="valor">R$ {{ c.limite }}</td>
                 <td>{{ c.fechamento }}</td>
                 <td>{{ c.vencimento }}</td>
-                <td><button onclick="openEditModal(
+                <td><button class="acao edit" onclick="openEditModal(
                         '{{ c.id }}',
                         '{{ c.descricao }}',
                         '{{ c.limite }}',
@@ -78,7 +78,7 @@
                         <i class="fa-solid fa-pen"></i>
                     </button>
                     <a href="{% url 'cartao_show_path' c.id %}">
-                        <button>
+                        <button class="acao">
                             <i class="fa-solid fa-eye"></i>
                         </button>
                     </a>

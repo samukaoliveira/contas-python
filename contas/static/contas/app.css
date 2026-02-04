@@ -422,21 +422,22 @@
             .cards {
                 display: grid;
                 grid-template-columns: repeat(auto-fit, minmax(600px, 1fr));
-                gap: 16px;
+                gap: 24px;
                 margin-bottom: 32px;
             }
 
             .card h3 {
-                margin: 0 0 8px;
-                font-size: 36px;
+                margin: 0 0 16px;
+                font-size: 38px;
                 font-weight: 500;
                 color: #666;
                 display: flex;
                 align-items: center;
-                gap: 6px;
+                gap: 10px;
             }
 
             .card p {
+                margin-top: 20px;
                 font-size: 34px;
             }
 
@@ -458,8 +459,8 @@
             }
 
             .competencia h1 {
-                margin: 0;
-                font-size: 40px;
+                margin-top: 10;
+                font-size: 44px;
                 color: var(--verde-principal);
                 font-weight: 600;
             }
@@ -469,7 +470,8 @@
             }
 
             .add-lancamento-btn {
-                font-size: 2rem;
+                margin-top: 10px;
+                font-size: 2.2rem;
             }
 
             .td-mobile {
@@ -480,12 +482,16 @@
                 display: none;
             }
 
-            .menu-btn, .logout-btn {
-                font-size: 42px;
+             .acao {
+                font-size: 20px;
+            }
+
+            .menu-btn {
+                font-size: 60px;
             }
 
             .logout-btn {
-                font-size: 26px;
+                font-size: 32px;
             }
 
             .nav-links a {
@@ -496,6 +502,10 @@
             .logo-home {
                 max-width: 250px; /* tamanho do logo */
                 height: auto;
+            }
+
+            .modal {
+                zoom: 1.9;
             }
         }
 
