@@ -47,7 +47,14 @@
             margin-bottom: 32px;
         }
 
-        .menu,
+        .menu {
+            grid-column: 1;
+            display: flex;
+            align-items: center;
+            justify-self: end;
+            gap: 12px;
+        }
+
         .login {
             grid-column: 3;
             display: flex;
@@ -394,7 +401,7 @@
         /* INÍCIO DO MOBILE */
 
 
-        @media (orientation: portrait) or (max-width: 768px) {
+        @media (orientation: portrait) or (max-width: 980px) {
 
             body {
                 zoom: 1;
@@ -521,7 +528,7 @@
             }
         }
 
-        @media (orientation: landscape) {
+        @media (orientation: landscape) or (min-width: 981px) {
             .menu-btn {
                 display: none;
             }
