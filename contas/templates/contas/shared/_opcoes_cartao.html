@@ -1,0 +1,31 @@
+{% load static %}
+<div class="opcoes">
+
+    <!-- BOTÃO MENU -->
+    <button class="menu-btn" onclick="toggleOpcoes(this)" aria-label="Opcoes">
+        <i class="fa-solid fa-square-caret-down"></i>
+    </button>
+
+    <!-- OPÇÕES -->
+    <nav id="navOpcoes" class="nav-opcoes">
+        <span><button class="acao edit" onclick="openEditModal(
+                        '{{ l.id }}',
+                        '{{ l.data|escapejs }}',
+                        '{{ l.descricao }}',
+                        '{{ l.valor }}',
+                        '{{ l.natureza }}',
+                        '{{ l.fixo }}',
+                        '{{ l.parcelas }}',
+                        '{{ l.pago }}')">
+                        <i class="fa-solid fa-pen"></i>
+                    </button></span>
+                    <span>
+                        <a href="{% url 'lancamentos_delete_path' l.id %}">
+                            <button class="acao delete">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </button>
+                        </a>
+                    </span>
+    </nav>
+</div>
+

@@ -11,6 +11,7 @@
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
     
     <link rel="stylesheet" href="{% static 'contas/app.css' %}">
+    <script  src="{% static 'contas/app.js' %}"></script>
 
 </head>
 <body>
@@ -69,7 +70,7 @@
                 <td class="valor">R$ {{ c.limite }}</td>
                 <td>{{ c.fechamento }}</td>
                 <td>{{ c.vencimento }}</td>
-                <td><button class="acao edit" onclick="openEditModal(
+                <td><button class="acao edit" onclick="openEditModalCartao(
                         '{{ c.id }}',
                         '{{ c.descricao }}',
                         '{{ c.limite }}',
@@ -149,39 +150,6 @@
     </div>
 </div>
 
-<script>
-    function openModal() {
-        document.getElementById('modalLancamento').style.display = 'flex';
-    }
-
-    function closeModal() {
-        const modal = document.getElementById('modalLancamento');
-        const form = document.querySelector("#modalLancamento form");
-        form.reset();
-        modal.style.display = 'none';
-    }
-
-    function toggleMenu() {
-        document.getElementById('navLinks').classList.toggle('aberto');
-    }
-
-
-    function openEditModal(id, descricao, limite, fechamento, vencimento) {
-    const form = document.querySelector('#modalLancamento form');
-
-    form.action = `/cartoes/${id}/edit/`;
-
-    form.descricao.value = descricao;
-    form.limite.value = parseFloat(limite.replace(',', '.'));
-    form.fechamento.value = fechamento;
-    form.vencimento.value = vencimento;
-
-    document.querySelector('#modalLancamento h2').innerText = 'Editar Cartão';
-
-    openModal();
-}
-
-</script>
 
 </body>
 </html>

@@ -398,10 +398,14 @@
             display: block;
         }
 
+        .status-mobile {
+            display: none;
+        }
+
         /* INÍCIO DO MOBILE */
 
 
-        @media (orientation: portrait) or (max-width: 980px) {
+        @media (orientation: portrait) {
 
             body {
                 zoom: 1;
@@ -420,7 +424,22 @@
                 gap: 12px;
             }
 
+            .nav-opcoes {
+                display: none;
+                position: absolute;
+                flex-direction: column;
+                background: white;
+                padding: 12px;
+                border-radius: 12px;
+                box-shadow: 0 6px 14px rgba(0,0,0,.15);
+                gap: 12px;
+            }
+
             .nav-links.aberto {
+                display: flex;
+            }
+
+            .nav-opcoes.aberto {
                 display: flex;
             }
 
@@ -438,30 +457,30 @@
 
             .card h3 {
                 margin: 0 0 16px;
-                font-size: 38px;
+                 font-size: clamp(1.2rem, 3.5vw, 2.2rem);
+                gap: 0.6rem;
                 font-weight: 500;
                 color: #666;
                 display: flex;
                 align-items: center;
-                gap: 10px;
             }
 
             .card p {
                 margin-top: 20px;
-                font-size: 46px;
+                font-size: clamp(1.4rem, 4vw, 2.6rem);
             }
 
             th {
-                font-size: 32px;
+                font-size: clamp(1.3rem, 3.5vw, 2rem);
                 font-weight: 600;
             }
 
             td {
-                font-size: 32px;
+                font-size: clamp(1.3rem, 3.5vw, 2rem);
             }
 
             .lancamento {
-                min-width: 350px;
+                min-width: 50vw;
             }
 
             .titulo span {
@@ -484,7 +503,7 @@
 
             .add-lancamento-btn {
                 margin-top: 10px;
-                font-size: 2.2rem;
+                font-size: clamp(1.2rem, 6vw, 2.2rem);
                 border-radius: 10px;
             }
 
@@ -506,7 +525,7 @@
             }
 
             .menu-btn {
-                font-size: 60px;
+                font-size: clamp(2rem, 8vw, 3.5rem);
             }
 
             .logout-btn {
@@ -514,7 +533,7 @@
             }
 
             .nav-links a {
-                font-size: 40px;
+                font-size: clamp(1.4rem, 10vw, 2.5rem);
                 padding: 16px;
             }
 
@@ -526,9 +545,61 @@
             .modal {
                 zoom: 1.9;
             }
+
+            .modal input {
+                margin-top: 6px;
+                font-size: 22px;
+            }
+
+            .modal select {
+                margin-top: 6px;
+            }
+
+            .modal label, .modal select, .modal button {
+                font-size: 20px;
+            }
+
+            .modal option {
+                font-size: 10px;
+            }
+
+            .modal label {
+                margin-top: 20px;
+            }
+
+            .modal .checkbox label {
+                align-items: left;
+            }
+
+            .modal .checkbox input[type="checkbox"] {
+                margin-top: -22px;
+                margin-left: -95px;
+                align-items: left;
+                transform: scale(1.6);
+            }
+
+            .form-group select {
+                width: 95%;
+            }
+
+            .modal button {
+                margin-top: 25px;
+            }
+
+            .modal h2 {
+                font-size: 25px;
+            }
+
+            .modal span, p {
+                font-size: 25px;
+            }
+
+            .status-mobile {
+                display: block;
+            }
         }
 
-        @media (orientation: landscape) or (min-width: 981px) {
+        @media (orientation: landscape) {
             .menu-btn {
                 display: none;
             }

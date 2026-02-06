@@ -11,6 +11,7 @@
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
     
     <link rel="stylesheet" href="{% static 'contas/app.css' %}">
+    <script  src="{% static 'contas/app.js' %}"></script>
 
 </head>
 <body>
@@ -89,6 +90,10 @@
                             <i class="fa-solid fa-clock"></i> Pendente
                         </span>
                     {% endif %}
+                    
+                </td>
+                <td>
+                     {% include "contas/shared/_opcoes_lancamento.html" %}
                 </td>
             </tr>
         {% endfor %}
@@ -98,20 +103,6 @@
 
 {% include "contas/shared/_modal_lancamentos.html" %}
 
-<script>
-    function openModal() {
-        document.getElementById('modalLancamento').style.display = 'flex';
-    }
-
-    function closeModal() {
-        document.getElementById('modalLancamento').style.display = 'none';
-    }
-
-    function toggleMenu() {
-        document.getElementById('navLinks').classList.toggle('aberto');
-    }
-
-</script>
 
 </body>
 </html>

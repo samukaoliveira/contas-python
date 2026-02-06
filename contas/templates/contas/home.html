@@ -14,6 +14,7 @@
 
     
     <link rel="stylesheet" href="{% static 'contas/app.css' %}">
+    <script  src="{% static 'contas/app.js' %}"></script>
 </head>
 <body>
 
@@ -129,34 +130,26 @@
                                     {% else %}
                                         <span class="receita"></span>R$ {{ l.valor|floatformat:2|intcomma }}</span>
                                     {% endif %}</td>
-                <td class="card-none">{{ l.natureza }}</td>
+                <td class="card-none">{{ l.natureza }} {{ l.fixo_helper }} {{ l.parcelas_helper }}</td>
                 <td>
                     {% if l.pago %}
-                        <span class="pago">
+                        <span class="pago card-none">
                             <i class="fa-solid fa-check"></i> Pago
                         </span>
+                        <span class="pago .status-mobile">
+                            <i class="fa-solid fa-check"></i>
+                        </span>
                     {% else %}
-                        <span class="nao-pago">
+                        <span class="nao-pago card-none">
                             <i class="fa-solid fa-clock"></i> Pend.
+                        </span>
+                        <span class="nao-pago .status-mobile">
+                            <i class="fa-solid fa-clock"></i>
                         </span>
                     {% endif %}
                 </td>
-                <td><span><button class="acao edit" onclick="openEditModal(
-                        '{{ l.id }}',
-                        '{{ l.data|escapejs }}',
-                        '{{ l.descricao }}',
-                        '{{ l.valor }}',
-                        '{{ l.natureza }}',
-                        '{{ l.pago }}')">
-                        <i class="fa-solid fa-pen"></i>
-                    </button></span>
-                    <span>
-                        <a href="{% url 'lancamentos_delete_path' l.id %}">
-                            <button class="acao delete">
-                                <i class="fa-solid fa-trash-can"></i>
-                            </button>
-                        </a>
-                    </span>
+                <td>
+                     {% include "contas/shared/_opcoes_lancamento.html" %}
                 </td>
             </tr>
         {% endfor %}
@@ -167,55 +160,6 @@
 {% include "contas/shared/_modal_lancamentos.html" %}
 {% include "contas/shared/_modal_pagar_fatura.html" %}
 
-<script>
-    function openModal() {
-        document.getElementById('modalLancamento').style.display = 'flex';
-    }
-
-    function closeModal() {
-        const form = document.querySelector("#modalLancamento form");
-        form.reset();
-        document.getElementById('modalLancamento').style.display = 'none';
-    }
-
-    function toggleMenu() {
-        document.getElementById('navLinks').classList.toggle('aberto');
-    }
-
-    function openEditModal(id, data, descricao, valor, natureza, pago) {
-    const form = document.querySelector('#modalLancamento form');
-
-    form.action = `/update/${id}/`;
-
-    form.data.value = data;
-    form.descricao.value = descricao;
-    form.valor.value = parseFloat(valor.replace(',', '.'));
-    form.natureza.value = natureza;
-    form.pago.checked = pago === 'True' || pago === true;
-
-
-
-    document.querySelector('#modalLancamento h2').innerText = 'Editar Lançamento';
-
-    openModal();
-}
-
-     function openModalFatura(fatura_id, valor_pago, data_pagamento) {
-        document.getElementById('modalPagarFatura').style.display = 'flex';
-        const form = document.querySelector('#modalPagarFatura form');
-
-        form.fatura_id.value = fatura_id;
-        form.valor_pago.value = parseFloat(valor_pago.replace(',', '.'));
-        form.data_pagamento.value = data_pagamento;
-    }
-
-     function closeModalFatura() {
-         const form = document.querySelector("#modalPagarFatura form");
-         form.reset();
-         document.getElementById('modalPagarFatura').style.display = 'none';
-    }
-
-</script>
 
 </body>
 </html>

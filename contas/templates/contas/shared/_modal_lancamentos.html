@@ -42,11 +42,26 @@
                 </select>
             </div>
 
+            <div class="form-group">
+                <label>Repetido</label>
+                <select name="fixo">
+                    <option value="NAO">Nao</option>
+                    <option value="FIXO">Fixo</option>
+                    <option value="PARCELADO">Parcelado</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Parcelas</label>
+                <input type="number" step="0.01" name="parcelas" required>
+                </select>
+            </div>
+
             <div class="form-group checkbox">
                 <label>
-                    <input type="checkbox" name="pago">
                     Já pago
                 </label>
+                <input type="checkbox" name="pago">
             </div>
 
             <footer class="modal-footer">

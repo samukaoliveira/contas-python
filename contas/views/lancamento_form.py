@@ -4,4 +4,4 @@ from contas.models import Lancamento
 class LancamentoForm(ModelForm):
     class Meta:
         model = Lancamento
-        fields = ['descricao', 'data' , 'valor', 'pago', 'fatura', 'natureza']
+        fields = ['descricao', 'data' , 'valor', 'pago', 'fatura', 'natureza', 'fixo', 'parcelas']

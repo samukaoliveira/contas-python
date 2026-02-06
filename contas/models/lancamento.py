@@ -8,6 +8,20 @@ class Lancamento(models.Model):
                 decimal_places=2
     )
     pago = models.BooleanField(default=False)
+    
+
+    class Fixo(models.TextChoices):
+            NAO = 'NAO', 'Nao'
+            FIXO = 'FIXO', 'Fixo'
+            PARCELADO = 'PARCELADO', 'Parcelado'
+
+    fixo = models.CharField(
+        max_length=10,
+        choices=Fixo.choices,
+        default=Fixo.NAO
+    )
+
+    parcelas = models.IntegerField(default=False)
     fatura = models.ForeignKey(
         'contas.Fatura', 
         on_delete=models.CASCADE, null=True,
@@ -35,3 +49,13 @@ class Lancamento(models.Model):
     class Meta:
         ordering = ['data']
         
+
+    def fixo_helper(self):
+        if self.fixo == True:
+             return "FIXA"
+        return ""
+    
+    def parcelas_helper(self):
+        if not self.parcelas:
+             return ""
+        return f"( {{ self.parcelas }} )"
