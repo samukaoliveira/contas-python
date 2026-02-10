@@ -1,6 +1,7 @@
 from django.shortcuts import redirect, render
 from contas.services import competencia_service
 from contas.views.cartao_form import CartaoFrom
+from contas.views import lancamentos
 from contas.views.pagar_fatura_form import PagarFaturaFrom
 from datetime import date
 from contas.models import Cartao, Fatura, Lancamento
@@ -103,23 +104,8 @@ def update(request, pk):
 
 @login_required
 def pagar_fatura(request):
-
-    if request.method == 'POST':
-
-        fatura_id = request.POST.get('fatura_id')
-        fatura = Fatura.objects.get(pk=fatura_id)
-
-        form = PagarFaturaFrom(request.POST, instance=fatura)
-
-        if form.is_valid():
-            print("FORM OK")
-            print(form.cleaned_data)
-            valor_pago = form.cleaned_data['valor_pago']
-            data_pagamento = form.cleaned_data['data_pagamento']
-            fatura_service.pagar_fatura(valor_pago, data_pagamento, fatura.cartao, fatura.competencia)
-            form.save()
-        else:
-            print("FORM ERROS:", form.errors)
+    lancamentos.pagar_cartao(request)
+            
         
     return redirect("home_path")
 

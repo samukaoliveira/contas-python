@@ -34,6 +34,7 @@ urlpatterns = [
     path('cartoes/pagar_fatura/', cartoes.pagar_fatura, name='pagar_fatura_path'),
     path("accounts/", include("allauth.urls")),
     path("health_check/", index.health_check, name='health_check_path'),
+    path('cartoes/lancamento/pagar/', cartoes.pagar_fatura, name='cartao_lancamento_pagar_path'),
 ]
 
 

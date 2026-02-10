@@ -17,6 +17,12 @@ def create_cartao(request, pk):
     return redirect("cartao_show_path", pk=pk)
 
 @login_required
+def pagar_cartao(request):
+
+    salva_lancamento(request)
+    return redirect("home_path")
+
+@login_required
 def salva_lancamento(request):
     if request.method == 'POST':
 

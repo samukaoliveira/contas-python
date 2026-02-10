@@ -1,4 +1,5 @@
 from datetime import date
+import calendar
 from contas.models import Competencia
 from contas.services import lancamento_service, cartao_service, fatura_service
 from decimal import Decimal
@@ -105,6 +106,8 @@ def total_despesas_sem_cartao(competencia):
         fatura__isnull=True
     )
 
+
+
     return soma_lancamentos(lancamentos)
 
 def saldo_todos_os_cartoes(competencia):
@@ -123,3 +126,10 @@ def calcula_rotativo(saldo_cartoes):
         rotativo = saldo_cartoes
 
     return rotativo
+
+def ultimo_dia_competencia(competencia):
+    return date(
+        competencia.ano,
+        competencia.mes,
+        calendar.monthrange(competencia.ano, competencia.mes)[1]
+    )

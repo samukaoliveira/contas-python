@@ -28,7 +28,7 @@
     }
 
 
-    function openEditModal(id, data, descricao, valor, natureza, pago, fixo, parcelas) {
+    function openEditModal(id, data, descricao, valor, natureza, fixo, parcelas, pago) {
         const form = document.querySelector('#modalLancamento form');
 
         form.action = `/update/${id}/`;
@@ -37,8 +37,8 @@
         form.descricao.value = descricao;
         form.valor.value = parseFloat(valor.replace(',', '.'));
         form.natureza.value = natureza;
-        form.fixo.value = fixo;
-        form.parcelas.value = parcelas;
+        form.fixo.value = fixo || "NAO";
+        form.parcelas.value = parcelas || 0;
         form.pago.checked = pago === 'True' || pago === true;
 
 

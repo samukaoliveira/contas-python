@@ -1,18 +1,32 @@
 from datetime import date
 from contas.models import Lancamento
+from contas.services import competencia_service
+from django.db.models import Q
+
+def base_lancamentos_competencia(competencia):
+    return Lancamento.objects.filter(
+        Q(data__month=competencia.mes, data__year=competencia.ano) |
+        Q(fixo=Lancamento.Fixo.FIXO),
+        fatura__isnull=True
+    )
+
 
 def get_lancamentos(competencia):
     return Lancamento.objects.filter(
             data__month = competencia.mes,
             data__year = competencia.ano)
 
+def get_lancamentos_por_fatura(fatura):
+    return Lancamento.objects.filter(
+            fatura = fatura)
+
 
 def get_despesas_competencia(competencia):
-    return get_lancamentos(competencia).filter(natureza = Lancamento.Natureza.DESPESA)
+    return get_all_lancamentos_por_competencia(competencia).filter(natureza = Lancamento.Natureza.DESPESA)
 
 
 def get_receitas_competencia(competencia):
-    return get_lancamentos(competencia).filter(natureza = Lancamento.Natureza.RECEITA)
+    return get_all_lancamentos_por_competencia(competencia).filter(natureza = Lancamento.Natureza.RECEITA)
 
 
 def todos_lancamentos_pagos():
@@ -39,3 +53,27 @@ def soma_lancamentos(lancamentos):
         soma += l.valor
 
     return soma
+
+
+def get_all_lancamentos_por_competencia(competencia):
+
+
+    return Lancamento.objects.filter(
+        (
+            Q(data__month=competencia.mes, data__year=competencia.ano)
+        ) |
+        (
+            Q(
+                fixo=Lancamento.Fixo.FIXO,
+                data__lte=competencia_service.ultimo_dia_competencia(competencia)
+            )
+        ),
+        fatura__isnull=True
+    )
+
+
+def get_lancamentos_fixos():
+
+    return Lancamento.objects.filter(
+        fixo = Lancamento.Fixo.FIXO
+    )

@@ -16,7 +16,9 @@ def obter_ou_criar_fatura(cartao, competencia):
 
 def get_despesas_fatura(fatura):
 
-    lancamentos = lancamento_service.get_despesas_competencia(fatura.competencia)
+    lancamentos = lancamento_service.get_lancamentos_por_fatura(fatura).filter(
+        natureza = Lancamento.Natureza.DESPESA
+    )
     
     lancamentos_fatura = lancamentos.filter(
         fatura = fatura
@@ -27,7 +29,9 @@ def get_despesas_fatura(fatura):
 
 def get_receitas_fatura(fatura):
 
-    lancamentos = lancamento_service.get_receitas_competencia(fatura.competencia)
+    lancamentos = lancamento_service.get_lancamentos_por_fatura(fatura).filter(
+        natureza = Lancamento.Natureza.RECEITA
+    )
     
     lancamentos_fatura = lancamentos.filter(
         fatura = fatura
@@ -58,6 +62,10 @@ def pagar_fatura(valor, data_pagamento, cartao, competencia):
         fatura.valor_pago = valor
         fatura.data_pagamento = data_pagamento
         fatura.save()
+
+
+def lancamento_pagar_fatura(valor, data_pagamento, cartao, competencia):
+    return
 
 def saldo_fatura_anterior(fatura):
     fatura_anterior = get_fatura_anterior(fatura)
@@ -99,7 +107,7 @@ def saldo_nao_pago(fatura):
 
     pago = fatura.valor_pago or Decimal("0.00")
 
-    return total + pago
+    return total - pago
 
 
 def gerar_rotativo(fatura_atual):

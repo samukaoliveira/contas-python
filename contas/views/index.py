@@ -17,11 +17,7 @@ def home(request):
         ano=int(ano) if ano else hoje.year
     )
 
-    lancamentos = Lancamento.objects.filter(
-        data__month=competencia.mes,
-        data__year=competencia.ano,
-        fatura = None
-    )
+    lancamentos = lancamento_service.get_all_lancamentos_por_competencia(competencia)
 
     cartoes = Cartao.objects.all()
 
