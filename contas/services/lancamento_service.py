@@ -1,6 +1,7 @@
 from datetime import date
 from contas.models import Lancamento
-from contas.services import competencia_service
+from contas.views.lancamento_form import LancamentoForm
+from contas.services import competencia_service, lancamento_service
 from django.db.models import Q
 
 def base_lancamentos_competencia(competencia):
@@ -77,3 +78,28 @@ def get_lancamentos_fixos():
     return Lancamento.objects.filter(
         fixo = Lancamento.Fixo.FIXO
     )
+
+
+def salva_lancamento(lancamento):
+    lancamento.save()
+
+
+def cria_lancamentos_fixos(lancamento):
+
+    mes = lancamento.data.month
+    ano = lancamento.data.year
+    ano_atual = ano
+
+    while ano_atual == ano:
+
+        proximo = competencia_service.proximo(mes, ano)
+        ano_atual = proximo['ano']
+
+        lancamento.data = date(
+            proximo['ano'],
+            proximo['mes'],
+            lancamento.data.day
+        )
+        lancamento_service.salva_lancamento(lancamento)
+
+    
