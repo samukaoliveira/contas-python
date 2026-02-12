@@ -62,12 +62,6 @@ def get_all_lancamentos_por_competencia(competencia):
     return Lancamento.objects.filter(
         (
             Q(data__month=competencia.mes, data__year=competencia.ano)
-        ) |
-        (
-            Q(
-                fixo=Lancamento.Fixo.FIXO,
-                data__lte=competencia_service.ultimo_dia_competencia(competencia)
-            )
         ),
         fatura__isnull=True
     )
@@ -86,20 +80,26 @@ def salva_lancamento(lancamento):
 
 def cria_lancamentos_fixos(lancamento):
 
-    mes = lancamento.data.month
+    lancamento_service.salva_lancamento(lancamento)
+
+    mes_atual = lancamento.data.month
     ano = lancamento.data.year
     ano_atual = ano
 
     while ano_atual == ano:
 
-        proximo = competencia_service.proximo(mes, ano)
-        ano_atual = proximo['ano']
+        proximo = competencia_service.proximo(mes_atual, ano)
 
         lancamento.data = date(
             proximo['ano'],
             proximo['mes'],
             lancamento.data.day
         )
+
         lancamento_service.salva_lancamento(lancamento)
+
+        mes_atual = proximo['mes']
+        ano_atual = proximo['ano']
+
 
     
