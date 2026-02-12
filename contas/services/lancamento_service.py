@@ -7,8 +7,7 @@ from django.db.models import Q
 
 def base_lancamentos_competencia(competencia):
     return Lancamento.objects.filter(
-        Q(data__month=competencia.mes, data__year=competencia.ano) |
-        Q(fixo=Lancamento.Fixo.FIXO),
+        Q(data__month=competencia.mes, data__year=competencia.ano),
         fatura__isnull=True
     )
 
@@ -84,9 +83,8 @@ def cria_lancamentos_fixos(lancamento):
     lancamento.pk = None
     lancamento_service.salva_lancamento(lancamento)
 
-    mes_atual = lancamento.data.month #fev
-    ano = lancamento.data.year #2026
-    ano_atual = ano #2026
+    mes_atual = lancamento.data.month 
+    ano = lancamento.data.year 
 
     while True:
 
@@ -98,15 +96,14 @@ def cria_lancamentos_fixos(lancamento):
         novo_lancamento = Lancamento.objects.get(pk=lancamento.pk)
         novo_lancamento.pk = None
         novo_lancamento.data = date(
-            proximo['ano'], #2026
-            proximo['mes'], #mar
+            proximo['ano'], 
+            proximo['mes'], 
             lancamento.data.day
         )
 
         lancamento_service.salva_lancamento(novo_lancamento)
 
-        mes_atual = proximo['mes'] #mar
-        ano_atual = proximo['ano'] #2026
+        mes_atual = proximo['mes'] 
 
 
 
@@ -115,8 +112,8 @@ def cria_lancamentos_fixos_cartao(lancamento):
     lancamento.pk = None
     lancamento_service.salva_lancamento(lancamento)
 
-    mes_atual = lancamento.data.month #fev
-    ano = lancamento.data.year #2026
+    mes_atual = lancamento.data.month 
+    ano = lancamento.data.year 
     fatura_atual = lancamento.fatura
 
     while True:
@@ -130,16 +127,56 @@ def cria_lancamentos_fixos_cartao(lancamento):
         novo_lancamento = Lancamento.objects.get(pk=lancamento.pk)
         novo_lancamento.pk = None
         novo_lancamento.data = date(
-            proximo['ano'], #2026
-            proximo['mes'], #mar
+            proximo['ano'], 
+            proximo['mes'], 
             lancamento.data.day
         )
         novo_lancamento.fatura = nova_fatura
 
         lancamento_service.salva_lancamento(novo_lancamento)
 
-        mes_atual = proximo['mes'] #mar
+        mes_atual = proximo['mes'] 
         fatura_atual = nova_fatura
+
+
+def cria_lancamentos_parcelados(lancamento):
+
+    mes_atual = lancamento.data.month 
+    ano = lancamento.data.year 
+    fatura_atual = lancamento.fatura
+    qtde_parcelas = lancamento.parcelas
+    descricao_inicial = lancamento.descricao
+    indice = 2
+
+    lancamento.pk = None
+    lancamento.descricao = f"{descricao_inicial} (1/{qtde_parcelas})"
+    lancamento_service.salva_lancamento(lancamento)
+
+    while indice <= qtde_parcelas:
+
+        proximo = competencia_service.proximo(mes_atual, ano)
+        nova_fatura = None
+        if fatura_atual != None:
+            nova_fatura = fatura_service.get_proxima_fatura(fatura_atual)
+
+        novo_lancamento = Lancamento.objects.get(pk=lancamento.pk)
+        novo_lancamento.pk = None
+        novo_lancamento.descricao = f"{descricao_inicial} ({indice}/{qtde_parcelas})"
+        novo_lancamento.data = date(
+            proximo['ano'], 
+            proximo['mes'], 
+            lancamento.data.day
+        )
+        novo_lancamento.fatura = nova_fatura or None
+
+        lancamento_service.salva_lancamento(novo_lancamento)
+
+        mes_atual = proximo['mes'] 
+        fatura_atual = nova_fatura
+
+        indice += 1
+
+
 
 
     

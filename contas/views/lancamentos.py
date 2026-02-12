@@ -52,7 +52,7 @@ def salva_por_frequencia(lancamento):
         case Lancamento.Fixo.NAO:
             lancamento_service.salva_lancamento(lancamento)
         case Lancamento.Fixo.PARCELADO:
-            return
+            lancamento_service.cria_lancamentos_parcelados(lancamento)
         
 
 def salva_por_frequencia_cartao(lancamento):
@@ -66,7 +66,7 @@ def salva_por_frequencia_cartao(lancamento):
         case Lancamento.Fixo.NAO:
             lancamento_service.salva_lancamento(lancamento)
         case Lancamento.Fixo.PARCELADO:
-            return
+             lancamento_service.cria_lancamentos_parcelados(lancamento)
 
 
 @login_required

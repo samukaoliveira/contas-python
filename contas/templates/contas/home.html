@@ -130,7 +130,7 @@
                                     {% else %}
                                         <span class="receita"></span>R$ {{ l.valor|floatformat:2|intcomma }}</span>
                                     {% endif %}</td>
-                <td class="card-none">{{ l.natureza }} {{ l.fixo_helper }} {{ l.parcelas_helper }}</td>
+                <td class="card-none">{{ l.natureza }}</td>
                 <td>
                     {% if l.pago %}
                         <span class="pago card-none">
