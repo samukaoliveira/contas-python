@@ -1,7 +1,8 @@
 from datetime import date
+from copy import deepcopy
 from contas.models import Lancamento
 from contas.views.lancamento_form import LancamentoForm
-from contas.services import competencia_service, lancamento_service
+from contas.services import competencia_service, lancamento_service, fatura_service
 from django.db.models import Q
 
 def base_lancamentos_competencia(competencia):
@@ -80,26 +81,65 @@ def salva_lancamento(lancamento):
 
 def cria_lancamentos_fixos(lancamento):
 
+    lancamento.pk = None
     lancamento_service.salva_lancamento(lancamento)
 
-    mes_atual = lancamento.data.month
-    ano = lancamento.data.year
-    ano_atual = ano
+    mes_atual = lancamento.data.month #fev
+    ano = lancamento.data.year #2026
+    ano_atual = ano #2026
 
-    while ano_atual == ano:
+    while True:
 
         proximo = competencia_service.proximo(mes_atual, ano)
 
-        lancamento.data = date(
-            proximo['ano'],
-            proximo['mes'],
+        if proximo['ano'] != ano:
+            break
+
+        novo_lancamento = Lancamento.objects.get(pk=lancamento.pk)
+        novo_lancamento.pk = None
+        novo_lancamento.data = date(
+            proximo['ano'], #2026
+            proximo['mes'], #mar
             lancamento.data.day
         )
 
-        lancamento_service.salva_lancamento(lancamento)
+        lancamento_service.salva_lancamento(novo_lancamento)
 
-        mes_atual = proximo['mes']
-        ano_atual = proximo['ano']
+        mes_atual = proximo['mes'] #mar
+        ano_atual = proximo['ano'] #2026
+
+
+
+def cria_lancamentos_fixos_cartao(lancamento):
+
+    lancamento.pk = None
+    lancamento_service.salva_lancamento(lancamento)
+
+    mes_atual = lancamento.data.month #fev
+    ano = lancamento.data.year #2026
+    fatura_atual = lancamento.fatura
+
+    while True:
+
+        proximo = competencia_service.proximo(mes_atual, ano)
+        nova_fatura = fatura_service.get_proxima_fatura(fatura_atual)
+
+        if proximo['ano'] != ano:
+            break
+
+        novo_lancamento = Lancamento.objects.get(pk=lancamento.pk)
+        novo_lancamento.pk = None
+        novo_lancamento.data = date(
+            proximo['ano'], #2026
+            proximo['mes'], #mar
+            lancamento.data.day
+        )
+        novo_lancamento.fatura = nova_fatura
+
+        lancamento_service.salva_lancamento(novo_lancamento)
+
+        mes_atual = proximo['mes'] #mar
+        fatura_atual = nova_fatura
 
 
     

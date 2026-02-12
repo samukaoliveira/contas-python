@@ -7,26 +7,20 @@ from django.contrib.auth.decorators import login_required
 
 @login_required
 def create(request):
-
-    fixo = {}
-    lancamento = valida_lancamento(request)
-    fixo = lancamento.fixo
-
-    match fixo:
-        case Lancamento.Fixo.FIXO:
-            lancamento_service.cria_lancamentos_fixos(lancamento)
-        case Lancamento.Fixo.NAO:
-            lancamento_service.salva_lancamento(lancamento)
-        case Lancamento.Fixo.PARCELADO:
-            return
     
+    lancamento = valida_lancamento(request)
+
+    salva_por_frequencia(lancamento)
     
     return redirect("home_path")
         
 @login_required
 def create_cartao(request, pk):
+    
+    lancamento = valida_lancamento(request)
 
-    lancamento_service.salva_lancamento(request)
+    salva_por_frequencia_cartao(lancamento)
+    
     return redirect("cartao_show_path", pk=pk)
 
 @login_required
@@ -45,6 +39,35 @@ def valida_lancamento(request):
 
             if form.is_valid():
                 return form.save(commit=False)
+            
+
+def salva_por_frequencia(lancamento):
+
+    fixo = {}
+    fixo = lancamento.fixo
+
+    match fixo:
+        case Lancamento.Fixo.FIXO:
+            lancamento_service.cria_lancamentos_fixos(lancamento)
+        case Lancamento.Fixo.NAO:
+            lancamento_service.salva_lancamento(lancamento)
+        case Lancamento.Fixo.PARCELADO:
+            return
+        
+
+def salva_por_frequencia_cartao(lancamento):
+
+    fixo = {}
+    fixo = lancamento.fixo
+
+    match fixo:
+        case Lancamento.Fixo.FIXO:
+            lancamento_service.cria_lancamentos_fixos_cartao(lancamento)
+        case Lancamento.Fixo.NAO:
+            lancamento_service.salva_lancamento(lancamento)
+        case Lancamento.Fixo.PARCELADO:
+            return
+
 
 @login_required
 def update(request, pk):

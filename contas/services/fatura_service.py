@@ -83,6 +83,17 @@ def get_fatura_anterior(fatura):
     
     return obter_ou_criar_fatura(fatura.cartao, comp_anterior)
 
+def get_proxima_fatura(fatura):
+    periodo_proxima_competencia = competencia_service.proximo(
+        fatura.competencia.mes, 
+        fatura.competencia.ano)
+    
+    proxima_competencia = competencia_service.obter_ou_criar_competencia(
+        periodo_proxima_competencia['mes'],
+        periodo_proxima_competencia['ano'])
+    
+    return obter_ou_criar_fatura(fatura.cartao, proxima_competencia)
+
 
 def saldo_rotativo_cartoes(competencia):
     
