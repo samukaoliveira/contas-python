@@ -1,10 +1,12 @@
 from django.shortcuts import redirect, render
 from contas.services import competencia_service, fatura_service, lancamento_service
 from datetime import date
-from contas.models import Lancamento, Cartao
+from contas.models import Lancamento, Cartao, Fatura
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
+from django.db.models import Prefetch, Sum, Case, When, F, DecimalField, ExpressionWrapper
+
 
 @login_required
 def home(request):
@@ -19,11 +21,26 @@ def home(request):
 
     lancamentos = lancamento_service.get_all_lancamentos_por_competencia(competencia)
 
-    cartoes = Cartao.objects.all()
+    cartoes = (
+        Cartao.objects
+        .prefetch_related(
+            Prefetch(
+                "fatura_set",
+                queryset=Fatura.objects.filter(competencia=competencia),
+                to_attr="faturas_competencia"
+            )
+        )
+    )
 
     for c in cartoes:
-        c.valor_fatura = fatura_service.total_fatura_por_cartao(c, competencia)
-        c.fatura = fatura_service.obter_ou_criar_fatura(c, competencia)
+        fatura = c.faturas_competencia[0] if c.faturas_competencia else None
+        c.fatura = fatura
+
+        if fatura:
+            total = fatura_service.calcular_despesas_fatura(fatura)
+            c.valor_fatura = total
+        else:
+            c.valor_fatura = 0
 
     return render(request, 'contas/home.html', {
         'competencia': competencia,

@@ -114,7 +114,7 @@ def saldo_todos_os_cartoes(competencia):
     faturas = fatura_service.gera_faturas_por_competencia(competencia)
     soma = 0
     for f in faturas:
-        soma += fatura_service.total_fatura(f) or Decimal("0.00")
+        soma += fatura_service.calcular_despesas_fatura(f) or Decimal("0.00")
 
     return soma
 

@@ -4,6 +4,7 @@ from contas.models import Lancamento
 from contas.views.lancamento_form import LancamentoForm
 from contas.services import competencia_service, lancamento_service, fatura_service
 from django.db.models import Q
+from django.db.models import Sum
 
 def base_lancamentos_competencia(competencia):
     return Lancamento.objects.filter(
@@ -49,11 +50,7 @@ def saldo_em_caixa():
     return todas_receitas_pagas() - todas_despesas_pagas()
 
 def soma_lancamentos(lancamentos):
-    soma = 0
-    for l in lancamentos:
-        soma += l.valor
-
-    return soma
+    return lancamentos.aggregate(total=Sum("valor"))["total"] or 0
 
 
 def get_all_lancamentos_por_competencia(competencia):
@@ -175,6 +172,19 @@ def cria_lancamentos_parcelados(lancamento):
         fatura_atual = nova_fatura
 
         indice += 1
+
+
+def lancamento_pagar_fatura(valor, data, fatura_atual):
+
+    Lancamento.objects.create(
+        fatura=fatura_atual,
+        eh_rotativo=False,
+        descricao="Pagamento realizado da fatura anterior",
+        data=data,
+        valor=valor,
+        natureza=Lancamento.Natureza.RECEITA,
+        pago=False,
+    )
 
 
 
