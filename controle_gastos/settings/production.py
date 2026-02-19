@@ -1,6 +1,8 @@
 from .base import *
 import dj_database_url
 import os
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
 
 DEBUG = False
 
@@ -26,6 +28,7 @@ ENGINE = "django.db.backends.postgresql"
 
 
 DATABASE_URL = os.environ.get("DATABASE_URL")
+SENTRY_URL = os.environ.get("SENTRY_URL")
 
 if not DATABASE_URL:
     raise RuntimeError("DATABASE_URL não definida nas variáveis de ambiente")
@@ -88,3 +91,9 @@ LOGGING = {
 }
 
 SITE_ID = 1
+
+sentry_sdk.init(
+    dsn=SENTRY_URL,
+    integrations=[DjangoIntegration()],
+    traces_sample_rate=1.0,
+)
