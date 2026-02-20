@@ -1,7 +1,7 @@
-from datetime import date
+import datetime
 import calendar
 from decimal import Decimal
-from django.db.models import Sum
+from django.db.models import Sum, Q, Case, When
 from django.db.models.functions import Coalesce
 
 from contas.models import Fatura, Cartao, Lancamento
@@ -35,15 +35,14 @@ def carregar_fatura_com_rotativo(cartao: Cartao, competencia):
 
 
 def get_fatura_anterior(fatura: Fatura, gerar_rotativo=True):
-    """
-    Retorna a fatura anterior.
-    Se gerar_rotativo=True, não gera recursivamente para evitar loops.
-    """
     mes_anterior = competencia_service.anterior(fatura.competencia.mes, fatura.competencia.ano)
-    comp_anterior = competencia_service.obter_ou_criar_competencia(mes_anterior['mes'], mes_anterior['ano'])
-    fatura_anterior = Fatura.objects.filter(cartao=fatura.cartao, competencia=comp_anterior).first()
+    
+    fatura_anterior = Fatura.objects.filter(
+        cartao=fatura.cartao,
+        competencia__mes=mes_anterior['mes'],
+        competencia__ano=mes_anterior['ano'],
+    ).select_related('competencia').first()  # ✅ select_related evita query extra na competencia
 
-    # Evita loop infinito ao gerar rotativo
     if gerar_rotativo and fatura_anterior:
         gerar_lancamento_rotativo(fatura_anterior, fatura)
 
@@ -70,48 +69,45 @@ def gera_faturas_por_competencia(competencia):
 # Rotativo
 # -------------------------------
 
-import calendar
-from decimal import Decimal
-from django.db.models import Sum
-import datetime
 
 def gerar_lancamento_rotativo(fatura_anterior, fatura_atual, juros_mensal=0):
-    # ✅ Garante que o rotativo da fatura anterior já foi calculado antes
-    fatura_anterior_da_anterior = Fatura.objects.filter(
-        cartao=fatura_anterior.cartao,
-        competencia__mes=competencia_service.anterior(
-            fatura_anterior.competencia.mes, 
-            fatura_anterior.competencia.ano
-        )['mes'],
-        competencia__ano=competencia_service.anterior(
-            fatura_anterior.competencia.mes,
-            fatura_anterior.competencia.ano
-        )['ano'],
-    ).first()
+    # ✅ Garante rotativo da fatura anterior em uma única query
+    if not fatura_anterior.lancamento_set.filter(eh_rotativo=True).exists():
+        fatura_anterior_da_anterior = Fatura.objects.filter(
+            cartao=fatura_anterior.cartao,
+            competencia__mes=competencia_service.anterior(
+                fatura_anterior.competencia.mes,
+                fatura_anterior.competencia.ano
+            )['mes'],
+            competencia__ano=competencia_service.anterior(
+                fatura_anterior.competencia.mes,
+                fatura_anterior.competencia.ano
+            )['ano'],
+        ).first()
 
-    if fatura_anterior_da_anterior:
-        gerar_lancamento_rotativo(fatura_anterior_da_anterior, fatura_anterior, juros_mensal)
+        if fatura_anterior_da_anterior:
+            gerar_lancamento_rotativo(fatura_anterior_da_anterior, fatura_anterior, juros_mensal)
 
-    total_despesas = fatura_anterior.lancamento_set.filter(
-        natureza=Lancamento.Natureza.DESPESA
-    ).aggregate(total=Sum('valor'))['total'] or Decimal('0')
+    # ✅ Uma única query com anotação ao invés de duas separadas
+    totais = fatura_anterior.lancamento_set.aggregate(
+        total_despesas=Coalesce(
+            Sum('valor', filter=Q(natureza=Lancamento.Natureza.DESPESA)), Decimal('0')
+        ),
+        total_receitas=Coalesce(
+            Sum('valor', filter=Q(natureza=Lancamento.Natureza.RECEITA)), Decimal('0')
+        ),
+    )
 
-    total_receitas = fatura_anterior.lancamento_set.filter(
-        natureza=Lancamento.Natureza.RECEITA
-    ).aggregate(total=Sum('valor'))['total'] or Decimal('0')
-
-    saldo = total_despesas - total_receitas
+    saldo = totais['total_despesas'] - totais['total_receitas']
 
     if saldo <= 0:
-        Lancamento.objects.filter(fatura=fatura_atual, eh_rotativo=True).delete()
+        fatura_atual.lancamento_set.filter(eh_rotativo=True).delete()
         return None
 
     saldo_com_juros = saldo * (1 + Decimal(str(juros_mensal)))
 
-    mes = fatura_atual.competencia.mes
-    ano = fatura_atual.competencia.ano
-    ultimo_dia = calendar.monthrange(ano, mes)[1]
-    data_lancamento = datetime.date(ano, mes, ultimo_dia)
+    mes, ano = fatura_atual.competencia.mes, fatura_atual.competencia.ano
+    data_lancamento = datetime.date(ano, mes, calendar.monthrange(ano, mes)[1])
 
     lancamento_rotativo, _ = Lancamento.objects.update_or_create(
         fatura=fatura_atual,
@@ -128,16 +124,11 @@ def gerar_lancamento_rotativo(fatura_anterior, fatura_atual, juros_mensal=0):
 
 
 def calcular_saldo_fatura(fatura: Fatura) -> Decimal:
-    """Simples: despesas - receitas. Rotativo já é um lançamento de DESPESA."""
-    despesas = fatura.lancamento_set.filter(
-        natureza=Lancamento.Natureza.DESPESA
-    ).aggregate(total=Coalesce(Sum('valor'), Decimal("0.00")))['total']
-
-    receitas = fatura.lancamento_set.filter(
-        natureza=Lancamento.Natureza.RECEITA
-    ).aggregate(total=Coalesce(Sum('valor'), Decimal("0.00")))['total']
-
-    return despesas - receitas
+    totais = fatura.lancamento_set.aggregate(
+        despesas=Coalesce(Sum('valor', filter=Q(natureza=Lancamento.Natureza.DESPESA)), Decimal("0.00")),
+        receitas=Coalesce(Sum('valor', filter=Q(natureza=Lancamento.Natureza.RECEITA)), Decimal("0.00")),
+    )
+    return totais['despesas'] - totais['receitas']
 
 
 def calcular_despesas_fatura(fatura: Fatura) -> Decimal:

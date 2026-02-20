@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 from contas.views import index, lancamentos, cartoes
 from django.views.generic import RedirectView
+from controle_gastos import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -36,6 +37,10 @@ urlpatterns = [
     path("health_check/", index.health_check, name='health_check_path'),
     path('cartoes/lancamento/pagar/', cartoes.pagar_fatura, name='cartao_lancamento_pagar_path'),
 ]
+
+if settings.DEBUG:
+    import debug_toolbar
+    urlpatterns = [path('__debug__/', include(debug_toolbar.urls))] + urlpatterns
 
 
 # urls.py

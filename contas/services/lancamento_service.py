@@ -3,14 +3,15 @@ from copy import deepcopy
 from contas.models import Lancamento
 from contas.views.lancamento_form import LancamentoForm
 from contas.services import competencia_service, lancamento_service, fatura_service
-from django.db.models import Q
-from django.db.models import Sum
+from django.db.models import Q, Sum
+from django.db.models.functions import Coalesce
+from decimal  import Decimal
 
 def base_lancamentos_competencia(competencia):
     return Lancamento.objects.filter(
         Q(data__month=competencia.mes, data__year=competencia.ano),
         fatura__isnull=True
-    )
+    ).select_related('fatura')
 
 
 def get_lancamentos(competencia):
@@ -47,7 +48,12 @@ def todas_despesas_pagas():
     ))
 
 def saldo_em_caixa():
-    return todas_receitas_pagas() - todas_despesas_pagas()
+    from django.db.models import Q
+    totais = Lancamento.objects.filter(pago=True).aggregate(
+        receitas=Coalesce(Sum('valor', filter=Q(natureza=Lancamento.Natureza.RECEITA)), Decimal('0')),
+        despesas=Coalesce(Sum('valor', filter=Q(natureza=Lancamento.Natureza.DESPESA)), Decimal('0')),
+    )
+    return totais['receitas'] - totais['despesas']
 
 def soma_lancamentos(lancamentos):
     return lancamentos.aggregate(total=Sum("valor"))["total"] or 0
@@ -121,7 +127,7 @@ def cria_lancamentos_fixos_cartao(lancamento):
         if proximo['ano'] != ano:
             break
 
-        novo_lancamento = Lancamento.objects.get(pk=lancamento.pk)
+        novo_lancamento = deepcopy(lancamento)
         novo_lancamento.pk = None
         novo_lancamento.data = date(
             proximo['ano'], 
@@ -156,7 +162,7 @@ def cria_lancamentos_parcelados(lancamento):
         if fatura_atual != None:
             nova_fatura = fatura_service.get_proxima_fatura(fatura_atual)
 
-        novo_lancamento = Lancamento.objects.get(pk=lancamento.pk)
+        novo_lancamento = deepcopy(lancamento)
         novo_lancamento.pk = None
         novo_lancamento.descricao = f"{descricao_inicial} ({indice}/{qtde_parcelas})"
         novo_lancamento.data = date(

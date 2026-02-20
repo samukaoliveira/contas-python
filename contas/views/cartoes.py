@@ -37,7 +37,7 @@ def show(request, pk):
             ano=int(ano) if ano else hoje.year
         )
 
-    fatura = fatura_service.carregar_fatura_com_rotativo(
+    fatura = fatura_service.obter_ou_criar_fatura(
         cartao=cartao,
         competencia=competencia
     )
