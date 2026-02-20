@@ -46,13 +46,16 @@ def show(request, pk):
         fatura = fatura
     )
 
-    total_fatura = fatura_service.calcular_saldo_fatura(fatura)
+    total_fatura = fatura_service.calcular_despesas_fatura(fatura)
+
+    falta_pagar = fatura_service.calcular_saldo_fatura(fatura)
 
     return render(request, 'contas/cartao.html', {
         'cartao': cartao,
         'fatura': fatura,
         'lancamentos': lancamentos,
         'total_fatura': total_fatura,
+        'falta_pagar': falta_pagar,
         'form_action': "cartao_lancamento_create_path",
         'anterior': competencia_service.anterior(mes, ano),
         'proximo': competencia_service.proximo(mes, ano),
