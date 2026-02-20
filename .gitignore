@@ -1,6 +1,7 @@
 # Python
 __pycache__/
 *.py[cod]
+*.pyc
 
 # Virtualenv
 venv/
@@ -14,3 +15,7 @@ media/
 # IDE
 .vscode/
 .idea/
+
+#Test
+.coverage
+htmlcov/
