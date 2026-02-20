@@ -26,29 +26,23 @@ def home(request):
 @login_required
 def show(request, pk):
 
-    hoje = date.today()
-    mes = request.GET.get('mes')
-    ano = request.GET.get('ano')
+    competencia, mes, ano = competencia_service.get_competencia_atual(request)
 
     cartao = Cartao.objects.get(pk =pk)
 
-    competencia = competencia_service.obter_ou_criar_competencia(
-            mes=int(mes) if mes else hoje.month,
-            ano=int(ano) if ano else hoje.year
-        )
-
-    fatura = fatura_service.obter_ou_criar_fatura(
+    fatura = fatura_service.carregar_fatura_com_rotativo(
         cartao=cartao,
         competencia=competencia
     )
 
-    lancamentos = Lancamento.objects.filter(
-        fatura = fatura
-    )
+    # ✅ Uma única query, avaliada como lista
+    lancamentos = list(Lancamento.objects.filter(fatura=fatura).order_by('data'))
 
-    total_fatura = fatura_service.calcular_despesas_fatura(fatura)
-
-    falta_pagar = fatura_service.calcular_saldo_fatura(fatura)
+    # ✅ Calcula tudo em Python, sem novas queries
+    despesas = sum(l.valor for l in lancamentos if l.natureza == Lancamento.Natureza.DESPESA)
+    receitas = sum(l.valor for l in lancamentos if l.natureza == Lancamento.Natureza.RECEITA)
+    total_fatura = despesas          # total de despesas
+    falta_pagar = despesas - receitas  # saldo líquido
 
     return render(request, 'contas/cartao.html', {
         'cartao': cartao,

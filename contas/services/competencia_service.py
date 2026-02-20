@@ -1,8 +1,10 @@
 from datetime import date
 import calendar
-from contas.models import Competencia
+from contas.models import Competencia, Lancamento
 from contas.services import lancamento_service, cartao_service, fatura_service
 from decimal import Decimal
+from django.db.models.functions import Coalesce
+from django.db.models import Sum
 
 def obter_ou_criar_competencia(mes=None, ano=None):
     hoje = date.today()
@@ -19,35 +21,21 @@ def obter_ou_criar_competencia(mes=None, ano=None):
 
 
 def anterior(mes, ano):
-    atual = obter_ou_criar_competencia(mes, ano)
-
-    if atual.mes == 1:
-        novo_mes = 12
-        novo_ano = atual.ano - 1
-    else:
-        novo_mes = atual.mes - 1
-        novo_ano = atual.ano
-
-    return {
-        "mes": novo_mes, 
-        "ano": novo_ano
-    }
+    mes = int(mes) if mes else 1
+    ano = int(ano) if ano else 1
+    
+    if mes == 1:
+        return {"mes": 12, "ano": ano - 1}
+    return {"mes": mes - 1, "ano": ano}
 
 
 def proximo(mes, ano):
-    atual = obter_ou_criar_competencia(mes, ano)
-
-    if atual.mes == 12:
-        novo_mes = 1
-        novo_ano = atual.ano + 1
-    else:
-        novo_mes =  atual.mes + 1
-        novo_ano = atual.ano
-
-    return {
-        "mes": novo_mes, 
-        "ano": novo_ano
-    }
+    mes = int(mes) if mes else 1
+    ano = int(ano) if ano else 1
+    
+    if mes == 12:
+        return {"mes": 1, "ano": ano + 1}
+    return {"mes": mes + 1, "ano": ano}
 
 
 def total_receitas_previstas(competencia):
@@ -133,3 +121,31 @@ def ultimo_dia_competencia(competencia):
         competencia.mes,
         calendar.monthrange(competencia.ano, competencia.mes)[1]
     )
+
+
+def get_competencia_atual(request):
+
+    hoje = date.today()
+    mes = request.GET.get('mes')
+    ano = request.GET.get('ano')
+
+    mes = int(mes) if mes else hoje.month
+    ano = int(ano) if ano else hoje.year
+
+    return obter_ou_criar_competencia(mes=mes, ano=ano), mes, ano
+
+
+def get_totais_competencia(competencia):
+    """Uma query só para todos os totais da competência."""
+    from django.db.models import Q
+    totais = Lancamento.objects.filter(
+        data__month=competencia.mes,
+        data__year=competencia.ano,
+        fatura__isnull=True
+    ).aggregate(
+        receitas_previstas=Coalesce(Sum('valor', filter=Q(natureza='RECEITA')), Decimal('0')),
+        despesas_previstas=Coalesce(Sum('valor', filter=Q(natureza='DESPESA')), Decimal('0')),
+        receitas_realizadas=Coalesce(Sum('valor', filter=Q(natureza='RECEITA', pago=True)), Decimal('0')),
+        despesas_realizadas=Coalesce(Sum('valor', filter=Q(natureza='DESPESA', pago=True)), Decimal('0')),
+    )
+    return totais

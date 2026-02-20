@@ -10,14 +10,8 @@ from django.db.models import Prefetch, Sum, Case, When, F, DecimalField, Express
 
 @login_required
 def home(request):
-    hoje = date.today()
-    mes = request.GET.get('mes')
-    ano = request.GET.get('ano')
 
-    competencia = competencia_service.obter_ou_criar_competencia(
-        mes=int(mes) if mes else hoje.month,
-        ano=int(ano) if ano else hoje.year
-    )
+    competencia, mes, ano = competencia_service.get_competencia_atual(request)
 
     lancamentos = lancamento_service.get_all_lancamentos_por_competencia(competencia)
 
@@ -26,7 +20,14 @@ def home(request):
         .prefetch_related(
             Prefetch(
                 "fatura_set",
-                queryset=Fatura.objects.filter(competencia=competencia),
+                queryset=Fatura.objects.filter(competencia=competencia)
+                .prefetch_related(  # ✅ carrega lançamentos junto
+                    Prefetch(
+                        "lancamento_set",
+                        queryset=Lancamento.objects.filter(natureza=Lancamento.Natureza.DESPESA),
+                        to_attr="despesas"
+                    )
+                ),
                 to_attr="faturas_competencia"
             )
         )
@@ -35,23 +36,21 @@ def home(request):
     for c in cartoes:
         fatura = c.faturas_competencia[0] if c.faturas_competencia else None
         c.fatura = fatura
+        # ✅ soma em Python, sem query
+        c.valor_fatura = sum(l.valor for l in fatura.despesas) if fatura else 0
 
-        if fatura:
-            total = fatura_service.calcular_despesas_fatura(fatura)
-            c.valor_fatura = total
-        else:
-            c.valor_fatura = 0
+    totais = competencia_service.get_totais_competencia(competencia)
 
     return render(request, 'contas/home.html', {
         'competencia': competencia,
         'lancamentos': lancamentos,
         'anterior': competencia_service.anterior(mes, ano),
         'proximo': competencia_service.proximo(mes, ano),
-        'receitas_previstas': competencia_service.total_receitas_previstas(competencia),
-        'despesas_previstas': competencia_service.total_despesas_previstas(competencia),
-        'receitas_realizadas': competencia_service.total_receitas_realizadas(competencia),
-        'despesas_realizadas': competencia_service.total_despesas_realizadas(competencia),
-        'saldo_previsto': competencia_service.saldo_previsto(competencia),
+        'receitas_previstas': totais['receitas_previstas'],
+        'despesas_previstas': totais['despesas_previstas'],
+        'receitas_realizadas': totais['receitas_realizadas'],
+        'despesas_realizadas': totais['despesas_realizadas'],
+        'saldo_previsto': totais['receitas_previstas'] - totais['despesas_previstas'],
         'saldo_em_caixa': lancamento_service.saldo_em_caixa(),
         'form_action': "lancamentos_create_path",
         'path': reverse('home_path', args=None),
