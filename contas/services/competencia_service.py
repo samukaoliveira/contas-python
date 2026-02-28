@@ -135,7 +135,7 @@ def get_competencia_atual(request):
     return obter_ou_criar_competencia(mes=mes, ano=ano), mes, ano
 
 
-def get_totais_competencia(competencia):
+def get_totais_competencia(competencia, total_cartoes):
     """Uma query só para todos os totais da competência."""
     from django.db.models import Q
     totais = Lancamento.objects.filter(
@@ -143,9 +143,12 @@ def get_totais_competencia(competencia):
         data__year=competencia.ano,
         fatura__isnull=True
     ).aggregate(
-        receitas_previstas=Coalesce(Sum('valor', filter=Q(natureza='RECEITA')), Decimal('0')),
+        receitas_previstas=Coalesce(Sum('valor', filter=Q(natureza='RECEITA') | Q(is_pagamento_fatura=True)), Decimal('0')),
         despesas_previstas=Coalesce(Sum('valor', filter=Q(natureza='DESPESA')), Decimal('0')),
         receitas_realizadas=Coalesce(Sum('valor', filter=Q(natureza='RECEITA', pago=True)), Decimal('0')),
         despesas_realizadas=Coalesce(Sum('valor', filter=Q(natureza='DESPESA', pago=True)), Decimal('0')),
     )
+
+    totais['despesas_previstas'] += total_cartoes
+        
     return totais

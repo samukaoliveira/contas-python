@@ -33,13 +33,16 @@ def home(request):
         )
     )
 
+    total_cartoes = 0
+
     for c in cartoes:
         fatura = c.faturas_competencia[0] if c.faturas_competencia else None
         c.fatura = fatura
         # ✅ soma em Python, sem query
         c.valor_fatura = sum(l.valor for l in fatura.despesas) if fatura else 0
+        total_cartoes += c.valor_fatura
 
-    totais = competencia_service.get_totais_competencia(competencia)
+    totais = competencia_service.get_totais_competencia(competencia, total_cartoes)
 
     return render(request, 'contas/home.html', {
         'competencia': competencia,

@@ -48,12 +48,33 @@ def todas_despesas_pagas():
     ))
 
 def saldo_em_caixa():
-    from django.db.models import Q
     totais = Lancamento.objects.filter(pago=True).aggregate(
-        receitas=Coalesce(Sum('valor', filter=Q(natureza=Lancamento.Natureza.RECEITA)), Decimal('0')),
-        despesas=Coalesce(Sum('valor', filter=Q(natureza=Lancamento.Natureza.DESPESA)), Decimal('0')),
+        receitas=Coalesce(
+            Sum('valor', 
+                filter=Q(
+                    natureza=Lancamento.Natureza.RECEITA,
+                    is_pagamento_fatura=False,
+                    pago=True)),
+            Decimal('0')
+        ),
+        despesas=Coalesce(
+            Sum(
+                'valor',
+                filter=Q(natureza=Lancamento.Natureza.DESPESA,
+                pago=True)
+            ),
+            Decimal('0')
+        ),
+        pagamentos_cartao=Coalesce(
+            Sum(
+                'valor',
+                filter=Q(is_pagamento_fatura=True)
+            ),
+            Decimal('0')
+        ),
     )
-    return totais['receitas'] - totais['despesas']
+
+    return totais['receitas'] - (totais['despesas'] + totais['pagamentos_cartao'])
 
 def soma_lancamentos(lancamentos):
     return lancamentos.aggregate(total=Sum("valor"))["total"] or 0
@@ -189,7 +210,8 @@ def lancamento_pagar_fatura(valor, data, fatura_atual):
         data=data,
         valor=valor,
         natureza=Lancamento.Natureza.RECEITA,
-        pago=False,
+        pago=True,
+        is_pagamento_fatura=True,
     )
 
 

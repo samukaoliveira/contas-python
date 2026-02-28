@@ -42,6 +42,8 @@ class Lancamento(models.Model):
         default=Natureza.DESPESA
     )
 
+    is_pagamento_fatura = models.BooleanField(default=False)
+
 
     def __str__(self):
         return self.descricao
