@@ -44,6 +44,10 @@ def home(request):
 
     totais = competencia_service.get_totais_competencia(competencia, total_cartoes)
 
+    saldo_em_caixa = lancamento_service.saldo_em_caixa()
+
+    saldo_previsto = (totais['receitas_previstas'] - totais['despesas_previstas']) + saldo_em_caixa
+
     return render(request, 'contas/home.html', {
         'competencia': competencia,
         'lancamentos': lancamentos,
@@ -53,8 +57,8 @@ def home(request):
         'despesas_previstas': totais['despesas_previstas'],
         'receitas_realizadas': totais['receitas_realizadas'],
         'despesas_realizadas': totais['despesas_realizadas'],
-        'saldo_previsto': totais['receitas_previstas'] - totais['despesas_previstas'],
-        'saldo_em_caixa': lancamento_service.saldo_em_caixa(),
+        'saldo_previsto': saldo_previsto,
+        'saldo_em_caixa': saldo_em_caixa,
         'form_action': "lancamentos_create_path",
         'path': reverse('home_path', args=None),
         'cartao': None,
