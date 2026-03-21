@@ -100,8 +100,8 @@
             <tr>
                 <td class="card-none">{{ c.vencimento }}/{{ competencia.mes }}/{{ competencia.ano }}</td>
                 <td class="lancamento">Cartão {{ c.descricao }}</td>
-                <td class="valor"> {% if c.valor_fatura < 0 %}
-                                        <span class="despesa">R$ {{ c.valor_fatura }}</span>
+                <td class="valor"> {% if c.valor_fatura > 0 %}
+                                        <span class="despesa">R$ -{{ c.valor_fatura }}</span>
                                     {% else %}
                                         <span class="receita"></span>R$ {{ c.valor_fatura }}</span>
                                     {% endif %}</td>

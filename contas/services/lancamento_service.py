@@ -6,6 +6,7 @@ from contas.services import competencia_service, lancamento_service, fatura_serv
 from django.db.models import Q, Sum
 from django.db.models.functions import Coalesce
 from decimal  import Decimal
+import uuid
 
 def base_lancamentos_competencia(competencia):
     return Lancamento.objects.filter(
@@ -104,6 +105,8 @@ def salva_lancamento(lancamento):
 
 def cria_lancamentos_fixos(lancamento):
 
+    grupo_id = uuid.uuid4()
+    lancamento.grupo_id = grupo_id
     lancamento.pk = None
     lancamento_service.salva_lancamento(lancamento)
 
@@ -133,6 +136,8 @@ def cria_lancamentos_fixos(lancamento):
 
 def cria_lancamentos_fixos_cartao(lancamento):
 
+    grupo_id = uuid.uuid4()
+    lancamento.grupo_id = grupo_id
     lancamento.pk = None
     lancamento_service.salva_lancamento(lancamento)
 
@@ -172,6 +177,8 @@ def cria_lancamentos_parcelados(lancamento):
     descricao_inicial = lancamento.descricao
     indice = 2
 
+    grupo_id = uuid.uuid4()
+    lancamento.grupo_id = grupo_id
     lancamento.pk = None
     lancamento.descricao = f"{descricao_inicial} (1/{qtde_parcelas})"
     lancamento_service.salva_lancamento(lancamento)

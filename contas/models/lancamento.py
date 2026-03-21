@@ -1,4 +1,5 @@
 from django.db import models
+import uuid
 
 class Lancamento(models.Model):
     descricao = models.CharField(max_length=70)
@@ -43,6 +44,8 @@ class Lancamento(models.Model):
     )
 
     is_pagamento_fatura = models.BooleanField(default=False)
+
+    grupo_id = models.UUIDField(default=uuid.uuid4, editable=False)
 
 
     def __str__(self):

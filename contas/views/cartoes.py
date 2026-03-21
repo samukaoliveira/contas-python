@@ -120,7 +120,9 @@ def pagar_fatura(request):
             fatura
         )
 
-    return redirect("home_path")
+    next_url = request.POST.get('next') 
+    
+    return redirect(next_url or "home_path")
 
 
 
