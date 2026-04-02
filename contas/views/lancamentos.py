@@ -94,7 +94,7 @@ def update(request, pk):
             
             return redirect(next_url or "home_path")
 
-    return render(request, 'seu_template.html', {'form': form})
+    return redirect(request.META.get('HTTP_REFERER', 'home_path'))
 
 @login_required
 def delete(request, pk):
