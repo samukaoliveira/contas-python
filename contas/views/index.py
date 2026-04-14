@@ -45,11 +45,10 @@ def home(request):
 
     totais_mes = Lancamento.objects.filter(
         data__month=competencia.mes,
-        data__year=competencia.ano,
-        fatura__isnull=True
+        data__year=competencia.ano
     ).aggregate(
         receitas=Coalesce(
-            Sum('valor', filter=Q(natureza='RECEITA') | Q(is_pagamento_fatura=True)),
+            Sum('valor', filter=Q(natureza='RECEITA', is_pagamento_fatura=False)),
             Decimal('0')
         ),
         despesas=Coalesce(
@@ -57,11 +56,15 @@ def home(request):
             Decimal('0')
         ),
         receitas_realizadas=Coalesce(
-            Sum('valor', filter=Q(natureza='RECEITA', pago=True)),
+            Sum('valor', filter=Q(natureza='RECEITA', pago=True, is_pagamento_fatura=False)),
             Decimal('0')
         ),
-        despesas_realizadas=Coalesce(
-            Sum('valor', filter=Q(natureza='DESPESA', pago=True)),
+        despesas_realizadas = Coalesce(
+            Sum(
+                'valor',
+                filter=Q(natureza='DESPESA', pago=True) |
+                    Q(natureza='RECEITA', pago=True, is_pagamento_fatura=True)
+            ),
             Decimal('0')
         ),
     )
