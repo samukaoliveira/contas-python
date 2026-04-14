@@ -52,7 +52,7 @@ def home(request):
             Decimal('0')
         ),
         despesas=Coalesce(
-            Sum('valor', filter=Q(natureza='DESPESA')),
+            Sum('valor', filter=Q(natureza='DESPESA'), fatura__isnull=True),
             Decimal('0')
         ),
         receitas_realizadas=Coalesce(
