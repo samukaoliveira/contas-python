@@ -74,8 +74,7 @@ def home(request):
     primeiro_dia_mes = date(competencia.ano, competencia.mes, 1)
 
     saldo_anterior = Lancamento.objects.filter(
-        data__month=competencia_service.anterior(competencia.mes, competencia.ano)['mes'],
-        data__year=competencia_service.anterior(competencia.mes, competencia.ano)['ano']
+        data__lt = primeiro_dia_mes
     ).aggregate(
         receitas_realizadas=Coalesce(
             Sum('valor', filter=Q(natureza='RECEITA', pago=True, is_pagamento_fatura=False)),
