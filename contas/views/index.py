@@ -74,22 +74,31 @@ def home(request):
     primeiro_dia_mes = date(competencia.ano, competencia.mes, 1)
 
     saldo_anterior = Lancamento.objects.filter(
-        data__lt=primeiro_dia_mes,
-        fatura__isnull=True
+        data__month=competencia_service.anterior(competencia.mes, competencia.ano)['mes'],
+        data__year=competencia_service.anterior(competencia.mes, competencia.ano)['ano']
     ).aggregate(
-        saldo=Coalesce(
-            Sum('valor', filter=Q(natureza='RECEITA') | Q(is_pagamento_fatura=True)),
+        receitas_realizadas=Coalesce(
+            Sum('valor', filter=Q(natureza='RECEITA', pago=True, is_pagamento_fatura=False)),
             Decimal('0')
-        ) - Coalesce(
-            Sum('valor', filter=Q(natureza='DESPESA')),
+        ),
+        despesas_realizadas = Coalesce(
+            Sum(
+                'valor',
+                filter=Q(natureza='DESPESA', pago=True) |
+                    Q(natureza='RECEITA', pago=True, is_pagamento_fatura=True)
+            ),
             Decimal('0')
-        )
-    )['saldo']
+        ),
+    )
+    saldo_anterior_valor = (
+    saldo_anterior['receitas_realizadas']
+    - saldo_anterior['despesas_realizadas']
+)
 
     saldo_previsto = (
         totais_mes['receitas']
         - totais_mes['despesas']
-        + saldo_anterior
+        + saldo_anterior_valor
     )
 
     saldo_em_caixa = lancamento_service.saldo_em_caixa()
