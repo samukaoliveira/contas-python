@@ -16,9 +16,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+
+from contas.api.views.lancamentos import *
 from contas.views import index, lancamentos, cartoes
+from contas.api.views import index as api_index
 from django.views.generic import RedirectView
 from controle_gastos import settings
+from rest_framework.authtoken.views import obtain_auth_token
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -36,6 +40,12 @@ urlpatterns = [
     path("accounts/", include("allauth.urls")),
     path("health_check/", index.health_check, name='health_check_path'),
     path('cartoes/lancamento/pagar/', cartoes.pagar_fatura, name='cartao_lancamento_pagar_path'),
+    path('api/login/', obtain_auth_token),
+    path('api/home/', api_index.home_api, name='home_api'),
+
+    path('api/lancamentos/', api_create_lancamento),
+    path('api/lancamentos/<int:pk>/', api_update_lancamento),
+    path('api/lancamentos/<int:pk>/delete/', api_delete_lancamento),
 ]
 
 if settings.DEBUG:

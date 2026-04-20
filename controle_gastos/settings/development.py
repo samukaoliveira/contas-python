@@ -3,7 +3,7 @@ import os
 
 DEBUG = True
 
-ALLOWED_HOSTS = ["snfin.samukaoliveira.com.br", "localhost", "127.0.0.1", "134.255.176.164"]
+ALLOWED_HOSTS = ["snfin.samukaoliveira.com.br", "localhost", "127.0.0.1", "134.255.176.164", "192.168.1.108"]
 
 CSRF_TRUSTED_ORIGINS = [
     "https://snfin.samukaoliveira.com.br",
