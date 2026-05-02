@@ -19,6 +19,34 @@ from rest_framework.authentication import TokenAuthentication
 def home_api(request):
     data = dashboard_service.get_dashboard_data(request)
 
+    # 🔥 monta lista unificada
+    lancamentos = [
+        {
+            "id": l.id,
+            "descricao": l.descricao,
+            "valor": float(l.valor),
+            "natureza": l.natureza,
+            "pago": l.pago,
+            "data": l.data.strftime("%Y-%m-%d"),
+            "tipo": "LANCAMENTO",
+            "cartao_id": None
+        }
+        for l in data["lancamentos"]
+    ]
+
+    # 🔥 adiciona cartões como lançamentos reais
+    for c in data["cartoes"]:
+        lancamentos.append({
+            "id": c["id"],
+            "descricao": f'Cartão {c["descricao"]}',
+            "valor": -float(c["valor_fatura"]),  # 🔥 sempre despesa
+            "natureza": "DESPESA",
+            "pago": False,
+            "data": f'{c["vencimento"]:02d}-{data["competencia"].mes:02d}-{data["competencia"].ano}',
+            "tipo": "CARTAO",
+            "cartao_id": c["id"]
+        })
+
     return JsonResponse({
         "competencia": {
             "mes": data['competencia'].mes,
@@ -31,21 +59,9 @@ def home_api(request):
         "saldos": {
             k: float(v) for k, v in data['saldos'].items()
         },
-        "cartoes": [
-            {
-                **c,
-                "valor_fatura": float(c["valor_fatura"])
-            } for c in data["cartoes"]
-        ],
-        "lancamentos": [
-            {
-                "id": l.id,
-                "descricao": l.descricao,
-                "valor": float(l.valor),
-                "natureza": l.natureza,
-                "pago": l.pago,
-                "data": l.data.strftime("%Y-%m-%d"),
-            }
-            for l in data["lancamentos"]
-        ]
+        # ❌ opcional: pode remover isso depois
+        # "cartoes": [...],
+
+        # ✅ agora unificado
+        "lancamentos": lancamentos
     })

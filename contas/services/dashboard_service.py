@@ -40,6 +40,7 @@ def get_dashboard_data(user):
         cartoes_data.append({
             "id": c.id,
             "descricao": c.descricao,
+            "vencimento": c.vencimento,
             "valor_fatura": valor_fatura,
         })
 

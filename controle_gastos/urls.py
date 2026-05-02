@@ -17,9 +17,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+from contas.api.views.cartoes import cartao_detalhe_api
 from contas.api.views.lancamentos import *
 from contas.views import index, lancamentos, cartoes
-from contas.api.views import index as api_index
+from contas.api.views import app_update, index as api_index
 from django.views.generic import RedirectView
 from controle_gastos import settings
 from rest_framework.authtoken.views import obtain_auth_token
@@ -46,6 +47,7 @@ urlpatterns = [
     path('api/lancamentos/', api_create_lancamento),
     path('api/lancamentos/<int:pk>/', api_update_lancamento),
     path('api/lancamentos/<int:pk>/delete/', api_delete_lancamento),
+    path("api/cartoes/<int:pk>/", cartao_detalhe_api),
 ]
 
 if settings.DEBUG:
