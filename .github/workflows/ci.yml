@@ -13,42 +13,70 @@ jobs:
 
     steps:
 
-      # 1️⃣ Pegar o código
+      # 1️⃣ Checkout
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0  # necessário para pegar tags do Git
+          fetch-depth: 0
 
-      # 2️⃣ Analizar com o Sonar
+      # 2️⃣ Python
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      # 3️⃣ Instalar dependências
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+
+          pip install -r requirements.txt
+
+          pip install pytest pytest-cov
+
+      # 4️⃣ Rodar testes + coverage
+      - name: Run tests with coverage
+        run: |
+          pytest --cov=. \
+                 --cov-report=xml \
+                 --cov-report=term
+
+      # DEBUG opcional
+      - name: Debug coverage
+        run: |
+          ls -lah
+          ls -lah coverage.xml
+
+      # 5️⃣ SonarQube
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v5
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-    
-      # 3️⃣ Configurar Docker
+
+      # 6️⃣ Docker
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
-      # 4️⃣ Login no Docker Hub
+      # 7️⃣ Login Docker Hub
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      # 5️⃣ Build da imagem Docker com tag do Git
+      # 8️⃣ Build
       - name: Build Docker image
         run: |
           IMAGE_NAME="samukaoliveira/snfin"
           TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "latest")
-          echo "Buildando $IMAGE_NAME:$TAG"
+
           docker build -t $IMAGE_NAME:$TAG .
 
-      # 6 Push para o Docker Hub
+      # 9️⃣ Push
       - name: Push Docker image
         run: |
           IMAGE_NAME="samukaoliveira/snfin"
           TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "latest")
-          echo "Pushando $IMAGE_NAME:$TAG"
+
           docker push $IMAGE_NAME:$TAG
