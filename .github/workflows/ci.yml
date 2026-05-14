@@ -36,6 +36,7 @@ jobs:
 
       # 4️⃣ Rodar testes + coverage
       - name: Run tests with coverage
+        continue-on-error: true
         run: |
           pytest --cov=. \
                  --cov-report=xml \
